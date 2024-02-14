@@ -9,7 +9,7 @@ import random
 """ List initializations
     generate a random array based on options
 """
-def ListInit(choice):
+def ListInit(start_range, size, end_range):
     # start_range = int(input("Enter the start range for a randomly generated set of array values: "))
     # end_range=int(input("Enter the end range for a randomly generated set of array values: "))
     # size = int(input("Enter the number of elements in the array to be randomly generated: "))
@@ -19,13 +19,8 @@ def ListInit(choice):
     # generate random values to initialize array
     unsorted_list=[random.randint(start_range, end_range) for _ in range(size)]
     return unsorted_list
-    
-    
-    
-    
 
 
-"""  testList """
 list_options ={ 
                 "0":["TestList",[0,10,100]],
                 "1":["1K List",[0,1000,10000]],
@@ -47,7 +42,6 @@ Bubble Sort
 """
 def BubbleSort(list):
     pass
-
 
 """
 Merge Sort
@@ -81,36 +75,42 @@ if __name__== "__main__":
     # Check if the user input corresponds to a valid option
     if list_choice in list_options:
         # Get the corresponding list
-        selected_list = list_options[list_choice]
-         # Display sort options to the user
-        print("Choose an option for the type of sort to run:")
-        for option, values in sort_options.items():
-            list_type,_ = values
-            print(f"{option}: {list_type}")
+        list_type, option_values = list_options[list_choice]
+        start_range,  end_range, size = option_values
+        
+        # call the list initialization function
+        
+        unsorted_list = ListInit(size, start_range, end_range)
+        print("The unsorted list is: ", unsorted_list)
+        # # Display sort options to the user
+        # print("Choose an option for the type of sort to run:")
+        # for option, values in sort_options.items():
+        #     list_type,_ = values
+        #     print(f"{option}: {list_type}")
     
-        # Prompt user for sort type input
-        sort_choice = input("Enter the number for the type of sort you want to perform: ")
+        # # Prompt user for sort type input
+        # sort_choice = input("Enter the number for the type of sort you want to perform: ")
     
-        # Check if the user input corresponds to a valid option
-        if list_choice in list_options:
-            # Get the corresponding list
-            selected_list = list_options[list_choice]
-            # Call the sort function with the selected list
-            if list_choice == 1:
-                BubbleSort(selected_list)
-                
-            elif list_choice == 2:
-                SelectionSort(selected_list)
+        # # Check if the user input corresponds to a valid option
+        # if list_choice in list_options:
+        #     # Get the corresponding list
+        #     selected_list = list_options[list_choice]
+        #     # Call the sort function with the selected list
+        #     if list_choice == 1:
+        #         BubbleSort(selected_list)
 
-            elif list_choice == 3:
-                InsertionSort(selected_list)
+        #     elif list_choice == 2:
+        #         SelectionSort(selected_list)
 
-            elif list_choice == 4:
-                MergeSort(selected_list)
+        #     elif list_choice == 3:
+        #         InsertionSort(selected_list)
+
+        #     elif list_choice == 4:
+        #         MergeSort(selected_list)
             
 
-        else:
-            print("Invalid option. Please choose from the given options.")
+        # else:
+        #     print("Invalid option. Please choose from the given options.")
     else:
         print("Invalid option. Please choose from the given options.")
    
