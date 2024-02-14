@@ -9,13 +9,14 @@ import random
 """ List initializations
     generate a random array based on options
 """
-def ListInit(start_range, size, end_range):
+def ListInit(size, start_range, end_range):
     # start_range = int(input("Enter the start range for a randomly generated set of array values: "))
     # end_range=int(input("Enter the end range for a randomly generated set of array values: "))
     # size = int(input("Enter the number of elements in the array to be randomly generated: "))
    
-    option_values = list_options[option]
-    start_range, size, end_range  = option_values[1]
+    
+    print(f"Random range begins at: ",start_range, " and ends at: ", end_range)
+    print(f'The size of the list is ',size, ' elements')
     # generate random values to initialize array
     unsorted_list=[random.randint(start_range, end_range) for _ in range(size)]
     return unsorted_list
@@ -76,7 +77,7 @@ if __name__== "__main__":
     if list_choice in list_options:
         # Get the corresponding list
         list_type, option_values = list_options[list_choice]
-        start_range,  end_range, size = option_values
+        start_range, size, end_range  = option_values
         
         # call the list initialization function
         
