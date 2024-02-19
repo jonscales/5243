@@ -46,17 +46,17 @@ Bubble Sort
 """
 def bubbleSort(list):
     swapped = True
-    n=len(list)
+    n=len(list)-1
     i=0
     while swapped: 
         swapped = False
-        for i in range(n-1):
+        for i in range(0,n):
             if unsorted_list[i]>unsorted_list[i+1]:
-                swap(unsorted_list[i],unsorted_list[i+1])
                 swapped = True
+                unsorted_list[i],unsorted_list[i+1] = unsorted_list[i+1], unsorted_list[i]
                 print("made a swap")
-        n-=1    
-                     
+          
+    print(list)                  
     return list    
     
 
@@ -102,24 +102,22 @@ if __name__== "__main__":
         # Display sort options to the user
         print("Choose an option for the type of sort to run:")
         for option, values in sort_options.items():
-            list_type,_ = values
-            print(f"{option}: {list_type}")
+            print(f"{option}: {values}")
     
         # Prompt user for sort type input
         sort_choice = input("Enter the number for the type of sort you want to perform: ")
     
         # Check if the user input corresponds to a valid option
-        if list_choice in list_options:
-            # Get the corresponding list
-            selected_list = list_options[list_choice]
+        if sort_choice in sort_options:
             # Call the sort function with the selected list
-            if list_choice == 1:
+            if sort_choice == "1":
+                print("you chose bubble sort")
                 bubbleSort(unsorted_list)
 
-            elif list_choice == 2:
+            elif sort_choice == "2":
                 selectionSort(unsorted_list)
 
-            elif list_choice == 3:
+            elif sort_choice == "3":
                 insertionSort(unsorted_list)
 
             else:
