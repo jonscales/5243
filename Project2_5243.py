@@ -39,7 +39,8 @@ sort_options={
               "1":"Bubble Sort",
               "2":"Selection Sort",
               "3":"Insertion Sort",
-              "4":"Merge Sort"
+              "4":"Merge Sort",
+              "5":"Quick Sort"
               }
 """
 Bubble Sort
@@ -76,6 +77,33 @@ Insertion Sort
 """
 def insertionSort(list):
     return list
+
+"""
+Quick Sort
+"""
+def quickSort(list):
+    n=len(list)
+    if n<=1
+        return list
+    else:
+        pivot =list.pop()
+
+    largeList = []
+    smallList = [] 
+
+    for item in list:
+        if item > pivot:
+            largeList.append(item)
+        else:
+            smallList.append(item)
+
+    return quickSort(smallList) + [pivot] + quickSort(largeList)             
+
+ 
+
+
+ 
+
 
 if __name__== "__main__":
 
@@ -120,8 +148,10 @@ if __name__== "__main__":
             elif sort_choice == "3":
                 insertionSort(unsorted_list)
 
-            else:
+            elif sort_choice =="4":
                 mergeSort(unsorted_list)
+            else:
+                quickSort(unsorted_list)
         else:
             print("Invalid option. Please choose from the given options.")
     else:
