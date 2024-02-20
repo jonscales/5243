@@ -56,8 +56,7 @@ def bubbleSort(list):
                 swapped = True
                 unsorted_list[i],unsorted_list[i+1] = unsorted_list[i+1], unsorted_list[i]
                 print("made a swap")
-          
-    print(list)                  
+                          
     return list    
     
 
@@ -84,7 +83,7 @@ def insertionSort(list):
         while list[i-1] > value and i>0:
             list[i], list[i-1] = list[i-1], list[i]
             i-=1
-    print(list)        
+            
     return list
 
 """
@@ -92,10 +91,12 @@ Quick Sort
 """
 def quickSort(list):
     n=len(list)
+    sortedList=[]
     if n<=1:
         return list
     else:
-        pivot =list.pop()
+        pivot = list.pop()
+        #print("The pivot value is : ", pivot)
 
     largeList = []
     smallList = [] 
@@ -105,8 +106,10 @@ def quickSort(list):
             largeList.append(item)
         else:
             smallList.append(item)
-
-    return quickSort(smallList) + [pivot] + quickSort(largeList)             
+   
+    #sortedList = quickSort(smallList) + [pivot] + quickSort(largeList) 
+    
+    return quickSort(smallList) + [pivot] + quickSort(largeList)           
 
  
 
@@ -149,18 +152,22 @@ if __name__== "__main__":
             # Call the sort function with the selected list
             if sort_choice == "1":
                 print("you chose bubble sort")
-                bubbleSort(unsorted_list)
+                print(bubbleSort(unsorted_list))
+               
 
             elif sort_choice == "2":
                 selectionSort(unsorted_list)
 
             elif sort_choice == "3":
-                insertionSort(unsorted_list)
-
+                print(insertionSort(unsorted_list))
+               
             elif sort_choice =="4":
-                mergeSort(unsorted_list)
+                print(mergeSort(unsorted_list))
+                
+
             else:
-                quickSort(unsorted_list)
+                print(quickSort(unsorted_list))
+                
         else:
             print("Invalid option. Please choose from the given options.")
     else:
