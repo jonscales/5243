@@ -65,6 +65,8 @@ def bubbleSort(list):
 Merge Sort
 """
 def mergeSort(list):
+
+
     return list
 
 """
@@ -76,6 +78,13 @@ def selectionSort(list):
 Insertion Sort
 """
 def insertionSort(list):
+    n=range(1,len(list))
+    for i in n:
+        value = list[i]
+        while list[i-1] > value and i>0:
+            list[i], list[i-1] = list[i-1], list[i]
+            i-=1
+    print(list)        
     return list
 
 """
@@ -83,7 +92,7 @@ Quick Sort
 """
 def quickSort(list):
     n=len(list)
-    if n<=1
+    if n<=1:
         return list
     else:
         pivot =list.pop()
