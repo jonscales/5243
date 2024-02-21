@@ -3,6 +3,8 @@ Jon Scales
 CMPS 5243  Algorithms & Analysis
 Spring 2024
 Project 2:  Sort Comparison
+
+Sort Code scripts were modified from those presented by Derrick Sherrill on his youtube channel originally aired 4 years ago.
 """
 import random
 
@@ -54,9 +56,7 @@ def bubbleSort(list):
         for i in range(0,n):
             if unsorted_list[i]>unsorted_list[i+1]:
                 swapped = True
-                unsorted_list[i],unsorted_list[i+1] = unsorted_list[i+1], unsorted_list[i]
-                print("made a swap")
-                          
+                unsorted_list[i],unsorted_list[i+1] = unsorted_list[i+1], unsorted_list[i]                          
     return list    
     
 
@@ -72,6 +72,14 @@ def mergeSort(list):
 Selection Sort
 """
 def selectionSort(list):
+    index_length = range(0, len(list)-1)
+    for i in index_length:
+        min= i
+        for j in range(i+1,len(list)):
+            if list[j] < list[min]:
+                min = j
+        if min !=i:
+            list[min], list[i] = list[i], list[min]        
     return list
 """
 Insertion Sort
@@ -91,7 +99,6 @@ Quick Sort
 """
 def quickSort(list):
     n=len(list)
-    sortedList=[]
     if n<=1:
         return list
     else:
@@ -154,18 +161,20 @@ if __name__== "__main__":
                 print("you chose bubble sort")
                 print(bubbleSort(unsorted_list))
                
-
             elif sort_choice == "2":
-                selectionSort(unsorted_list)
+                print("you chose selection sort")
+                print(selectionSort(unsorted_list))
 
             elif sort_choice == "3":
+                print("you chose insertion sort")
                 print(insertionSort(unsorted_list))
                
             elif sort_choice =="4":
+                print("you chose merge sort")
                 print(mergeSort(unsorted_list))
                 
-
             else:
+                print("you chose quick sort")
                 print(quickSort(unsorted_list))
                 
         else:
