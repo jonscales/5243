@@ -26,8 +26,8 @@ import csv
     generate a random list based on user options
 """
 def listInit(size, start_range, end_range): 
-    print(f"Random range begins at: ",start_range, " and ends at: ", end_range)
-    print(f'The size of the list is ',size, ' elements')
+    # print(f"Random range begins at: ",start_range, " and ends at: ", end_range)
+    # print(f'The size of the list is ',size, ' elements')
     # generate random values to initialize array
     unsorted_list=[random.randint(start_range, end_range) for _ in range(size)]
     return unsorted_list
@@ -41,15 +41,14 @@ Dictionaries for creating list size and sort type options
 for a menu choice user interface
 """    
 
-list_options ={ 
-                "0":["TestList",[0,10,100]],
-                "1":["1K List",[0,1000,10000]],
-                "2":["2K List",[0,1000,10000]],
-                "3":["3K List",[0,3000,10000]],
-                "4":["4K List",[0,4000,10000]],
-                "5":["5K List",[0,5000,10000]],
-                "6":["6K List",[0,6000,10000]],
-                "7":["7K List",[0,7000,10000]]
+list_options ={                 
+                "1":["1K_List",[0,1000,10000]],
+                "2":["2K_List",[0,1000,10000]],
+                "3":["3K_List",[0,3000,10000]],
+                "4":["4K_List",[0,4000,10000]],
+                "5":["5K_List",[0,5000,10000]],
+                "6":["6K_List",[0,6000,10000]],
+                "7":["7K_List",[0,7000,10000]]
             }
 sort_options={
               "1":"Bubble Sort - O(n^2)",
@@ -221,10 +220,8 @@ def quickSort(list):
     
     return quickSort(smallList) + [pivot] + quickSort(largeList)           
 
-"""ChatGPT code for running the analysis using the timeit_timeit module 
-import random
-import timeit
-import csv
+"""
+ChatGPT code for running the analysis using the timeit_timeit module 
 """
 
 # Function to generate a shuffled list of a specified size
@@ -233,9 +230,7 @@ def generate_shuffled_list(size):
     random.shuffle(lst)
     return lst
 
-# Function to sort a given list (replace this with your sorting function)
-def custom_sort(lst):
-    return sorted(lst)
+
 
 # Measure the execution time of the sorting function while ignoring the shuffle function
 def measure_sort_execution(size):
@@ -257,74 +252,44 @@ def main():
             average_execution_time = measure_sort_execution(size)
             csv_writer.writerow([size, average_execution_time])
 
-# if __name__ == "__main__":
-#     main()
-
-
-
-
-
-
-
- 
 
 
 if __name__== "__main__":
-
-    # Display list options to the user
-    print("Choose an option for list type:")
-    for option, values in list_options.items():
-        list_type,_ = values
-        print(f"{option}: {list_type}")
-
-    # Prompt user for list size input
-    list_choice = input("Enter the number for list size you want to sort: ")
-
-    # Check if the user input corresponds to a valid option
-    if list_choice in list_options:
-        # Get the corresponding list
-        list_type, option_values = list_options[list_choice]
-        start_range, size, end_range  = option_values
+#Loop to make lists
+    List_Sets = {}
+    for key, value in list_options.items():
+        list_name, params = value
+        size, start_range, end_range = params
+        generated_list = listInit(size, start_range, end_range)
+        List_Sets[list_name] = generated_list
         
-        # call the list initialization function
-        
-        unsorted_list = listInit(size, start_range, end_range)
-        print("The unsorted list is: ", unsorted_list)
-        
-        # Display sort options to the user
-        print("Choose an option for the type of sort to run:")
-        for option, values in sort_options.items():
-            print(f"{option}: {values}")
     
-        # Prompt user for sort type input
-        sort_choice = input("Enter the number for the type of sort you want to perform: ")
-    
-        # Check if the user input corresponds to a valid option
-        if sort_choice in sort_options:
-            # Call the sort function with the selected list
-            if sort_choice == "1":
-                print("you chose bubble sort")
-                print(bubbleSort(unsorted_list))
-               
-            elif sort_choice == "2":
-                print("you chose selection sort")
-                print(selectionSort(unsorted_list))
+    # Loop to run merge sort
+        
+        for i in range(10):
+            
+            
+            pass
 
-            elif sort_choice == "3":
-                print("you chose insertion sort")
-                print(insertionSort(unsorted_list))
-               
-            elif sort_choice =="4":
-                print("you chose merge sort")
-                print(merge_sort(unsorted_list))
-                
-            else:
-                print("you chose quick sort")
-                print(quickSort(unsorted_list))
-                
-        else:
-            print("Invalid option. Please choose from the given options.")
-    else:
-        print("Invalid option. Please choose from the given options.")
-   
-   
+    # Loop to run quick sort
+        for i in range(10):
+            
+            
+            pass
+
+
+
+    # loop to run selection sort
+        for i in range(10):
+        
+        
+            pass
+
+
+    # loop to run insertion sort
+        for i in range(10):
+            pass
+
+        
+    
+    
