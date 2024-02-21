@@ -5,8 +5,11 @@ Spring 2024
 Project 2:  Sort Comparison
 
 Sort Code scripts were modified from those presented by Derrick Sherrill on his youtube channel originally aired 4 years ago.
+Merge sort code was modified from FelixTechTips youtube video from 3 years ago.
 """
 import random
+import timeit
+import csv
 
 """ List initializations
     generate a random array based on options
@@ -21,11 +24,11 @@ def listInit(size, start_range, end_range):
 def randomize(sorted_list):
     unsorted_list = random.shuffle(sorted_list)
     return unsorted_list
-
-def swap(x,y):
-    return y, x
     
-    
+""" 
+Dictionaries for creating list size and sort type options
+for a menu choice user interface
+"""    
 
 list_options ={ 
                 "0":["TestList",[0,10,100]],
@@ -45,70 +48,101 @@ sort_options={
               "5":"Quick Sort"
               }
 """
-Bubble Sort
+Bubble Sort O(n^2)
 """
 def bubbleSort(list):
+    list_copy=list[:]
     swapped = True
-    n=len(list)-1
+    n=len(list_copy)-1
     i=0
     while swapped: 
         swapped = False
         for i in range(0,n):
-            if unsorted_list[i]>unsorted_list[i+1]:
+            if list_copy[i]>list_copy[i+1]:
                 swapped = True
-                unsorted_list[i],unsorted_list[i+1] = unsorted_list[i+1], unsorted_list[i]                          
-    return list    
+                list_copy[i],list_copy[i+1] = list_copy[i+1], list_copy[i]                          
+    return list_copy   
     
 
 """
-Merge Sort
+Merge Sort:  O(nlogn)
 """
 def mergeSort(list):
+    list_copy=list[:]
+    if len(list_copy)>1:
+        left =list_copy[:len(list_copy)//2]
+        right = list_copy[len(list_copy)//2:]
+    
+        mergeSort(left)
+        mergeSort(right)
 
+        l = 0 # index positioner for left sublist
+        r = 0 # index positioner for right sublist
+        m = 0 # index positioner for merged sublists
+       
+        while l < len(left) and r < len(right):
+            if left[l] < right[r]:
+                list_copy[m] = left[l]
+                l+=1
+                
+            else:
+                list_copy[m]=right[r]
+                r+=1
+            m+=1  
+        while l<len(left):
+            list_copy[m]=left[l]
+            l+=1
+            m+=1
+        while r<len(right):
+            list_copy[m]=right[r]
+            r+=1
+            m+=1    
 
-    return list
+    return list_copy
 
 """
-Selection Sort
+Selection Sort O(n^2)
 """
 def selectionSort(list):
-    index_length = range(0, len(list)-1)
+    list_copy=list[:]
+    index_length = range(0, len(list_copy)-1)
     for i in index_length:
         min= i
-        for j in range(i+1,len(list)):
-            if list[j] < list[min]:
+        for j in range(i+1,len(list_copy)):
+            if list_copy[j] < list_copy[min]:
                 min = j
         if min !=i:
-            list[min], list[i] = list[i], list[min]        
-    return list
+            list_copy[min], list_copy[i] = list_copy[i], list_copy[min]        
+    return list_copy
 """
-Insertion Sort
+Insertion Sort  O(n^2)
 """
 def insertionSort(list):
-    n=range(1,len(list))
+    list_copy=list[:]
+    n=range(1,len(list_copy))
     for i in n:
-        value = list[i]
-        while list[i-1] > value and i>0:
-            list[i], list[i-1] = list[i-1], list[i]
-            i-=1
-            
-    return list
+        value = list_copy[i]
+        while list_copy[i-1] > value and i>0:
+            list_copy[i], list_copy[i-1] = list_copy[i-1], list_copy[i]
+            i-=1            
+    return list_copy
 
 """
-Quick Sort
+Quick Sort O(nlogn)
 """
 def quickSort(list):
-    n=len(list)
+    list_copy=list[:]
+    n=len(list_copy)
     if n<=1:
-        return list
+        return list_copy
     else:
-        pivot = list.pop()
+        pivot = list_copy.pop()
         #print("The pivot value is : ", pivot)
 
     largeList = []
     smallList = [] 
 
-    for item in list:
+    for item in list_copy:
         if item > pivot:
             largeList.append(item)
         else:
@@ -118,7 +152,48 @@ def quickSort(list):
     
     return quickSort(smallList) + [pivot] + quickSort(largeList)           
 
- 
+"""ChatGPT code for running the analysis using the timeit_timeit module 
+import random
+import timeit
+import csv
+
+# Function to generate a shuffled list of a specified size
+def generate_shuffled_list(size):
+    lst = list(range(size))
+    random.shuffle(lst)
+    return lst
+
+# Function to sort a given list (replace this with your sorting function)
+def custom_sort(lst):
+    return sorted(lst)
+
+# Measure the execution time of the sorting function while ignoring the shuffle function
+def measure_sort_execution(size):
+    shuffled_list = generate_shuffled_list(size)
+    execution_times = []
+    for _ in range(10):
+        shuffled_list_copy = shuffled_list[:]  # Make a copy to preserve the original shuffled list
+        execution_time = timeit.timeit(lambda: custom_sort(shuffled_list_copy), number=1)
+        execution_times.append(execution_time)
+    average_execution_time = sum(execution_times) / len(execution_times)
+    return average_execution_time
+
+# Main function to perform measurements for different list sizes
+def main():
+    with open('sort_execution_times.csv', 'w', newline='') as csvfile:
+        csv_writer = csv.writer(csvfile)
+        csv_writer.writerow(['List Size', 'Average Execution Time (s)'])
+        for size in range(1000, 8000, 1000):
+            average_execution_time = measure_sort_execution(size)
+            csv_writer.writerow([size, average_execution_time])
+
+if __name__ == "__main__":
+    main()
+
+
+
+"""
+
 
 
  
