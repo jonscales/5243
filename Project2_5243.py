@@ -68,36 +68,43 @@ def bubbleSort(list):
 Merge Sort:  O(nlogn)
 """
 def mergeSort(list):
-    list_copy=list[:]
-    if len(list_copy)>1:
-        left =list_copy[:len(list_copy)//2]
+    list_copy = list[:]
+    if len(list_copy) > 1:
+        left = list_copy[:len(list_copy)//2]
         right = list_copy[len(list_copy)//2:]
-    
+        print('left array: ' , left)
+        print('right array: ' , right)
         mergeSort(left)
         mergeSort(right)
+
 
         l = 0 # index positioner for left sublist
         r = 0 # index positioner for right sublist
         m = 0 # index positioner for merged sublists
-       
+        
         while l < len(left) and r < len(right):
-            if left[l] < right[r]:
+            if left[l] <= right[r]:
                 list_copy[m] = left[l]
                 l+=1
-                
+                m+=1 
+                               
             else:
-                list_copy[m]=right[r]
+                list_copy[m] = right[r]
                 r+=1
-            m+=1  
-        while l<len(left):
-            list_copy[m]=left[l]
+            
+                m+=1 
+        print(list_copy)      
+        
+        while l < len(left):
+            list_copy[m] = left[l]
             l+=1
             m+=1
-        while r<len(right):
-            list_copy[m]=right[r]
+        print(list_copy)
+        while r < len(right):
+            list_copy[m] = right[r]
             r+=1
             m+=1    
-
+        print(list_copy)
     return list_copy
 
 """
