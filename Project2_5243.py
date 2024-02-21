@@ -4,15 +4,18 @@ CMPS 5243  Algorithms & Analysis
 Spring 2024
 Project 2:  Sort Comparison
 
-Sort Code scripts were modified from those presented by Derrick Sherrill on his youtube channel originally aired 4 years ago.
-Merge sort code was modified from FelixTechTips youtube video from 3 years ago.
+Code Source & Assistance Reference: 
+Bubble, Insertion, Selection & Quick Sort code scripts were modified from 
+those presented by Derrick Sherrill on his youtube channel originally aired 4 years ago.
+Merge sort code was modified from chat GPT code.
 """
 import random
 import timeit
+import time
 import csv
 
 """ List initializations
-    generate a random array based on options
+    generate a random list based on user options
 """
 def listInit(size, start_range, end_range): 
     print(f"Random range begins at: ",start_range, " and ends at: ", end_range)
@@ -41,148 +44,155 @@ list_options ={
                 "7":["7K List",[0,7000,10000]]
             }
 sort_options={
-              "1":"Bubble Sort",
-              "2":"Selection Sort",
-              "3":"Insertion Sort",
-              "4":"Merge Sort",
-              "5":"Quick Sort"
+              "1":"Bubble Sort - O(n^2)",
+              "2":"Selection Sort - O(n^2)",
+              "3":"Insertion Sort - O(n^2)",
+              "4":"Merge Sort - O(nlogn)",
+              "5":"Quick Sort - O(nlogn)"
               }
+
+#Sort methods
+
 """
 Bubble Sort O(n^2)
 """
 def bubbleSort(list):
     list_copy=list[:]
     swapped = True
-    n=len(list_copy)-1
-    i=0
+    ctr = 0 # counter for swaps
+    start_time=time.time() # get start time for run
+    n=len(list_copy)-1 # n = length (size) of list - 1 since adding 1 to get last element
+    i=0 # index pointer to increment after each loop through list 
+    
+    #loop until no swaps are made
     while swapped: 
         swapped = False
+        #iterate over list checking each pair of adjacent index values for inequality
         for i in range(0,n):
             if list_copy[i]>list_copy[i+1]:
+                list_copy[i],list_copy[i+1] = list_copy[i+1], list_copy[i]   # makes a swap
                 swapped = True
-                list_copy[i],list_copy[i+1] = list_copy[i+1], list_copy[i]                          
-    return list_copy   
+                ctr +=1
     
-
-"""Chat GPT merge sort code
-def merge_sort(arr):
-    if len(arr) > 1:
-        # Split the array into two halves
-        mid = len(arr) // 2
-        left_half = arr[:mid]
-        right_half = arr[mid:]
-
-        # Recursively sort each half
-        merge_sort(left_half)
-        merge_sort(right_half)
-
-        # Merge the sorted halves
-        i = j = k = 0  # Index pointers for left_half, right_half, and arr respectively
-        while i < len(left_half) and j < len(right_half):
-            if left_half[i] < right_half[j]:
-                arr[k] = left_half[i]
-                i += 1
-            else:
-                arr[k] = right_half[j]
-                j += 1
-            k += 1
-
-        # Copy any remaining elements from left_half
-        while i < len(left_half):
-            arr[k] = left_half[i]
-            i += 1
-            k += 1
-
-        # Copy any remaining elements from right_half
-        while j < len(right_half):
-            arr[k] = right_half[j]
-            j += 1
-            k += 1
-
-# Test the merge_sort function
-arr = [12, 11, 13, 5, 6, 7]
-merge_sort(arr)
-print("Sorted array is:", arr)
-
-
+    end_time = time.time()
+    execution_time = end_time - start_time
+    
+    return execution_time, ctr                                   
+    
+    #return list_copy   
+    
+"""
+Selection Sort O(n^2)
+"""
+def selectionSort(list):
+    ctr = 0 # counter for swaps
+    start_time=time.time() # get start time for run
+    list_copy=list[:]
+    index_length = range(0, len(list_copy)-1)
+    
+    # iterate over list except the last index value & set current index vale to min
+    for i in index_length:
+        min = i
+        #iterate a second time over the list comparing min to adjacent index
+        for j in range(i+1,len(list_copy)):
+            # reset min to current index if smaller
+            if list_copy[j] < list_copy[min]:
+                min = j
+        # swap current index and original min value if min index has changed
+        if min !=i:
+            list_copy[min], list_copy[i] = list_copy[i], list_copy[min] # makes a swap
+            ctr += 1        
+    
+    end_time = time.time()
+    execution_time = end_time - start_time
+    
+    return execution_time, ctr  
+    #return list_copy
 
 """
+Insertion Sort  O(n^2)
+"""
+def insertionSort(list):
+    ctr = 0 # counter for swaps
+    start_time=time.time() # get start time for run
+    list_copy=list[:]
+    n=range(1,len(list_copy)) 
+   
+    # iterate over list and get index value excepting the 1st index (0) position
+    for i in n: 
+        value = list_copy[i]
+       
+        # loop through list comparing value to previous index value 
+        while list_copy[i-1] > value and i>0: 
+            list_copy[i], list_copy[i-1] = list_copy[i-1], list_copy[i] #swap made
+            i-=1
+            ctr +=1            
+    
+    end_time = time.time()
+    execution_time = end_time - start_time
+    
+    return execution_time, ctr  
+    
+    #return list_copy
 
 """
 Merge Sort:  O(nlogn)
 """
 def mergeSort(list):
+    ctr = 0 # counter for swaps
+    start_time=time.time() # get start time for run
+
     list_copy = list[:]
+
+    # check if list has been split into lists of individual elements
     if len(list_copy) > 1:
-        left = list_copy[:len(list_copy)//2]
-        right = list_copy[len(list_copy)//2:]
-        print('left array: ' , left)
-        print('right array: ' , right)
-        mergeSort(left)
-        mergeSort(right)
+        # Split the array into two halves
+        mid = len(list_copy) // 2
+        left = list_copy[:mid]
+        right = list_copy[mid:]
 
+        # Recursively sort each half
+        ctr_left = mergeSort(left)
+        ctr_right = mergeSort(right)
+        ctr += ctr_left + ctr_right
 
-        l = 0 # index positioner for left sublist
-        r = 0 # index positioner for right sublist
-        m = 0 # index positioner for merged sublists
-        
+        # Merge the sorted halves
+        l = r = m = 0  # Index pointers for left list, right list, and merged list respectively
+        # loop to compare left & right and add to merged list
         while l < len(left) and r < len(right):
-            if left[l] <= right[r]:
+            if left[l] < right[r]:
                 list_copy[m] = left[l]
-                l+=1
-                m+=1 
-                               
+                l += 1
             else:
-                list_copy[m] = right[r]
-                r+=1
-            
-                m+=1 
-        print(list_copy)      
-        
+                list[m] = right[r]
+                r += 1
+            m += 1
+
+        # Copy any remaining elements from left list
         while l < len(left):
             list_copy[m] = left[l]
-            l+=1
-            m+=1
-        print(list_copy)
+            l += 1
+            m += 1
+
+        # Copy any remaining elements from right list
         while r < len(right):
             list_copy[m] = right[r]
-            r+=1
-            m+=1    
-        print(list_copy)
-    return list_copy
-
-"""
-Selection Sort O(n^2)
-"""
-def selectionSort(list):
-    list_copy=list[:]
-    index_length = range(0, len(list_copy)-1)
-    for i in index_length:
-        min= i
-        for j in range(i+1,len(list_copy)):
-            if list_copy[j] < list_copy[min]:
-                min = j
-        if min !=i:
-            list_copy[min], list_copy[i] = list_copy[i], list_copy[min]        
-    return list_copy
-"""
-Insertion Sort  O(n^2)
-"""
-def insertionSort(list):
-    list_copy=list[:]
-    n=range(1,len(list_copy))
-    for i in n:
-        value = list_copy[i]
-        while list_copy[i-1] > value and i>0:
-            list_copy[i], list_copy[i-1] = list_copy[i-1], list_copy[i]
-            i-=1            
+            r += 1
+            m += 1
+    
+    end_time = time.time()
+    execution_time = end_time - start_time
+    
+    return execution_time, ctr  
+    
+    
     return list_copy
 
 """
 Quick Sort O(nlogn)
 """
 def quickSort(list):
-    list_copy=list[:]
+    list_copy = list[:]
     n=len(list_copy)
     if n<=1:
         return list_copy
@@ -207,6 +217,7 @@ def quickSort(list):
 import random
 import timeit
 import csv
+"""
 
 # Function to generate a shuffled list of a specified size
 def generate_shuffled_list(size):
@@ -238,12 +249,12 @@ def main():
             average_execution_time = measure_sort_execution(size)
             csv_writer.writerow([size, average_execution_time])
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+#     main()
 
 
 
-"""
+
 
 
 
@@ -297,7 +308,7 @@ if __name__== "__main__":
                
             elif sort_choice =="4":
                 print("you chose merge sort")
-                print(mergeSort(unsorted_list))
+                print(merge_sort(unsorted_list))
                 
             else:
                 print("you chose quick sort")
