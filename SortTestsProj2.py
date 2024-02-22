@@ -21,6 +21,7 @@ import random
 import timeit
 import time
 import csv
+from rich import print 
 
 """ List initializations
     generate a random list based on user options
@@ -42,13 +43,13 @@ for a menu choice user interface
 """    
 
 list_options ={                 
-                "1":["1K_List",[0,1000,10000]],
-                "2":["2K_List",[0,1000,10000]],
-                "3":["3K_List",[0,3000,10000]],
-                "4":["4K_List",[0,4000,10000]],
-                "5":["5K_List",[0,5000,10000]],
-                "6":["6K_List",[0,6000,10000]],
-                "7":["7K_List",[0,7000,10000]]
+                "1":["1K_List",[1000,0,100000]],
+                "2":["2K_List",[2000,0,100000]],
+                "3":["3K_List",[3000,0,100000]],
+                "4":["4K_List",[4000,0,100000]],
+                "5":["5K_List",[5000,0,100000]],
+                "6":["6K_List",[6000,0,100000]],
+                "7":["7K_List",[7000,0,100000]]
             }
 sort_options={
               "1":"Bubble Sort - O(n^2)",
@@ -256,6 +257,26 @@ def main():
 
 if __name__== "__main__":
 #Loop to make lists
+    # for i in range(10):
+    #     # define list size
+    #     # sizes=[1000,2000,3000,4000,5000,6000,7000]
+    #     sizes = [10]
+    #     for size in sizes:
+    #         for i in range(size)
+    #             x=random.
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     List_Sets = {}
     for key, value in list_options.items():
         list_name, params = value
@@ -263,7 +284,10 @@ if __name__== "__main__":
         generated_list = listInit(size, start_range, end_range)
         List_Sets[list_name] = generated_list
         
-    
+    for key, value in List_Sets.items():
+        print(f'List Name: {key} , Size = {len(value)}') 
+
+
     # Loop to run merge sort
         
         for i in range(10):
