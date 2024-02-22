@@ -276,17 +276,17 @@ if __name__== "__main__":
     
     
     
-    
+    # Generate a dictionary of the 7 lists to use for the sort analyses
     List_Sets = {}
     for key, value in list_options.items():
         list_name, params = value
         size, start_range, end_range = params
         generated_list = listInit(size, start_range, end_range)
         List_Sets[list_name] = generated_list
-        
+    # show that dictionary contains the lists of the correct size    
     for key, value in List_Sets.items():
         print(f'List Name: {key} , Size = {len(value)}') 
-
+    # deep copy each list for use with each sort analysis
 
     # Loop to run merge sort
         
