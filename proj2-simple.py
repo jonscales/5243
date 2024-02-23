@@ -1,3 +1,6 @@
+
+
+
 """
 Jon Scales
 CMPS 5243  Algorithms & Analysis
@@ -22,43 +25,11 @@ import timeit
 import time
 import csv
 from rich import print 
+import copy
 
-""" List initializations
-    generate a random list based on user options
-"""
-def listInit(size, start_range, end_range): 
-    # generate random values to initialize array
-    unsorted_list=[random.randint(start_range, end_range) for _ in range(size)]
-    return unsorted_list
 
-def randomize(sorted_list):
-    unsorted_list = random.shuffle(sorted_list)
-    return unsorted_list
-    
-""" 
-Dictionaries for creating list size and sort type options
-for a menu choice user interface
-"""    
-
-list_options ={                 
-                "1":["1K_List",[1000,0,100000]],
-                "2":["2K_List",[2000,0,100000]],
-                "3":["3K_List",[3000,0,100000]],
-                "4":["4K_List",[4000,0,100000]],
-                "5":["5K_List",[5000,0,100000]],
-                "6":["6K_List",[6000,0,100000]],
-                "7":["7K_List",[7000,0,100000]]
-            }
-sort_options={
-              "1":"Bubble Sort - O(n^2)",
-              "2":"Selection Sort - O(n^2)",
-              "3":"Insertion Sort - O(n^2)",
-              "4":"Merge Sort - O(nlogn)",
-              "5":"Quick Sort - O(nlogn)"
-              }
 
 #Sort methods
-
 """
 Bubble Sort O(n^2)
 """
@@ -197,11 +168,14 @@ def mergeSort(list):
 """
 Quick Sort O(nlogn)
 """
-def quickSort(list):
+def quickSort(list, ctr=0):
+    #ctr passed in as default variable set = 0 
+    start_time=time.time() # get start time for run
+    
     list_copy = list[:]
     n=len(list_copy)
     if n<=1:
-        return list_copy
+        return ctr, time.time() - start_time
     else:
         pivot = list_copy.pop()
         #print("The pivot value is : ", pivot)
@@ -214,102 +188,51 @@ def quickSort(list):
             largeList.append(item)
         else:
             smallList.append(item)
-   
-    #sortedList = quickSort(smallList) + [pivot] + quickSort(largeList) 
+    ctr = quickSort(smallList, ctr+1) 
+    ctr = quickSort(largeList, ctr+1)
     
-    return quickSort(smallList) + [pivot] + quickSort(largeList)           
+    sorted_list = smallList + [pivot] + largeList 
+    
+    end_time = time.time()
+    execution_time = end_time - start_time
 
-"""
-ChatGPT code for running the analysis using the timeit_timeit module 
-"""
+    return execution_time, ctr 
+    #return quickSort(smallList) + [pivot] + quickSort(largeList)      
 
-# Function to generate a shuffled list of a specified size
-def generate_shuffled_list(size):
-    lst = list(range(size))
-    random.shuffle(lst)
-    return lst
-
-# Measure the execution time of the sorting function while ignoring the shuffle function
-def measure_sort_execution(size):
-    shuffled_list = generate_shuffled_list(size)
-    execution_times = []
-    for _ in range(10):
-        shuffled_list_copy = shuffled_list[:]  # Make a copy to preserve the original shuffled list
-        execution_time = timeit.timeit(lambda: custom_sort(shuffled_list_copy), number=1)
-        execution_times.append(execution_time)
-    average_execution_time = sum(execution_times) / len(execution_times)
-    return average_execution_time
-
-# Main function to perform measurements for different list sizes
-def main():
-    with open('sort_execution_times.csv', 'w', newline='') as csvfile:
-        csv_writer = csv.writer(csvfile)
-        csv_writer.writerow(['List Size', 'Average Execution Time (s)'])
-        for size in range(1000, 8000, 1000):
-            average_execution_time = measure_sort_execution(size)
-            csv_writer.writerow([size, average_execution_time])
-
-
-
-if __name__== "__main__":
-#Loop to make lists
-    # for i in range(10):
-    #     # define list size
-    #     # sizes=[1000,2000,3000,4000,5000,6000,7000]
-    #     sizes = [10]
-    #     for size in sizes:
-    #         for i in range(size)
-    #             x=random.
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    # Generate a dictionary of the 7 lists to use for the sort analyses
-    List_Sets = {}
-    for key, value in list_options.items():
-        list_name, params = value
-        size, start_range, end_range = params
-        generated_list = listInit(size, start_range, end_range)
-        List_Sets[list_name] = generated_list
-    # show that dictionary contains the lists of the correct size    
-    for key, value in List_Sets.items():
-        print(f'List Name: {key} , Size = {len(value)}') 
-    # deep copy each list for use with each sort analysis
-
-    # Loop to run merge sort
+#Loop to make & sort lists
+for _ in range(10):
+    # define list size
+    #sizes=[1000,2000,3000,4000,5000,6000,7000]
+    sizes = [10]
+    # iterate over sizes list to create lists of random integers for sorting
+    for size in sizes:
+        #iterate over size range to generate 4 randomly filled lists, 1 for each sort type
+        unsorted_list=[random.randint(0, 100000) for _ in range(size) ]
+        #deep copy unsorted list
+        MS = copy.deepcopy(unsorted_list) # merge sort list
+        QS = copy.deepcopy(unsorted_list) # quick sort list
+        IS = copy.deepcopy(unsorted_list) # insertion sort list
+        SS = copy.deepcopy(unsorted_list) # selection sort list
+        # run 1st sort method on its list
         
-        for i in range(10):
-            
-            
-            pass
-
-    # Loop to run quick sort
-        for i in range(10):
-            
-            
-            pass
-
-
-
-    # loop to run selection sort
-        for i in range(10):
+        merge_ctr, merge_time = mergeSort(MS)
+        quick_ctr, quick_time = quickSort(QS)
+        insert_ctr, insert_time = insertionSort(IS)
+        select_ctr, select_time = selectionSort(SS)
+        
+        with open('sorting_data.csv', 'a', newline='') as csvfile:
+            csv_writer = csv.writer(csvfile)
+            #write header if file is empty
+            if csvfile.tell() == 0:
+                csv_writer.writerow('Sort Type','List Size','Counter #','Execution Time (s)')
+            #write data on subsequent rows    
+            csv_writer.writerow('Merge',size, merge_ctr, merge_time)
+            csv_writer.writerow('Quick',size, quick_ctr, quick_time)
+            csv_writer.writerow('Insertion',size, insert_ctr, insert_time)
+            csv_writer.writerow('Selection',size, select_ctr, select_time)    
         
         
-            pass
-
-
-    # loop to run insertion sort
-        for i in range(10):
-            pass
-
         
-    
-    
+        
+
+
