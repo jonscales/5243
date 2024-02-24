@@ -71,15 +71,17 @@ def selectionSort(list):
     # iterate over list except the last index value & set current index vale to min
     for i in index_length:
         min = i
+        ctr+=1 #counter incremented b/c list element accessed
         #iterate a second time over the list comparing min to adjacent index
         for j in range(i+1, len(list)):
             # reset min to current index if smaller
             if list[j] < list[min]:
                 min = j
+                ctr += 1  # counter incremented b/c list elements accessed 
         # swap current index and original min value if min index has changed
         if min !=i:
             list[min], list[i] = list[i], list[min] # makes a swap
-            ctr += 1        
+            ctr += 1  # counter incremented b/c list elements swapped       
     
     end_time = time.time()
     execution_time = end_time - start_time
@@ -97,12 +99,13 @@ def insertionSort(list):
     # iterate over list and get index value excepting the 1st index (0) position
     for i in n: 
         value = list[i]
+        ctr+=1 # counter incremented b/c list element accessed
        
         # loop through list comparing value to previous index value 
         while list[i-1] > value and i>0: 
             list[i], list[i-1] = list[i-1], list[i] #swap made
             i-=1
-            ctr +=1            
+            ctr +=1  # counter incremented b/c list elements swapped          
     
     end_time = time.time()
     execution_time = end_time - start_time
