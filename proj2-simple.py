@@ -46,10 +46,11 @@ def bubbleSort(list):
         swapped = False
         #iterate over list checking each pair of adjacent index values for inequality
         for i in range(0,n):
+            ctr+=1 # list element accessed
             if list[i]>list[i+1]:
                 list[i],list[i+1] = list[i+1], list[i]   # makes a swap
                 swapped = True
-                ctr +=1
+                #ctr +=1 # list elements swapped
     
     end_time = time.time()
     execution_time = end_time - start_time
@@ -75,13 +76,14 @@ def selectionSort(list):
         #iterate a second time over the list comparing min to adjacent index
         for j in range(i+1, len(list)):
             # reset min to current index if smaller
+            ctr += 1  # counter incremented b/c list elements accessed 
             if list[j] < list[min]:
                 min = j
-                ctr += 1  # counter incremented b/c list elements accessed 
+                
         # swap current index and original min value if min index has changed
         if min !=i:
             list[min], list[i] = list[i], list[min] # makes a swap
-            ctr += 1  # counter incremented b/c list elements swapped       
+            #ctr += 1  # counter incremented b/c list elements swapped       
     
     end_time = time.time()
     execution_time = end_time - start_time
@@ -92,7 +94,7 @@ def selectionSort(list):
 Insertion Sort  O(n^2)
 """
 def insertionSort(list):
-    ctr = 0 # counter for swaps
+    ctr = 0 # counter for element access & swaps
     start_time=time.time() # get start time for run
     n=range(1,len(list)) 
    
