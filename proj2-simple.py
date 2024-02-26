@@ -24,7 +24,7 @@ import random
 import timeit
 import time
 import csv
-from rich import print 
+#from rich import print 
 import copy
 
 
