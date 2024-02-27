@@ -220,6 +220,7 @@ for size in sizes:
     #run each sort method on 10 X on its list, randomize list between runs
     for _ in range(10):
        #call sorts on randomized list
+        # call merge sort
         merge_ctr, merge_time = mergeSort(randomize(MS))
         
         with open('merge_sort_data.csv', 'a', newline='') as csvfile:
@@ -229,7 +230,8 @@ for size in sizes:
                 csv_writer.writerow(['Sort Type','List Size','Counter #','Execution Time (s)'])
             #write data on subsequent rows    
             csv_writer.writerow(['Merge',size, merge_ctr, merge_time])
-              
+        
+        # call quick sort      
         quick_ctr, quick_time = quickSort(randomize(QS))
 
         with open('quick_sort_data.csv', 'a', newline='') as csvfile:
@@ -238,8 +240,9 @@ for size in sizes:
             if csvfile.tell() == 0:
                 csv_writer.writerow(['Sort Type','List Size','Counter #','Execution Time (s)'])
             #write data on subsequent rows    
-            csv_writer.writerow(['Quick',size, quick_ctr, quick_time])    
+            csv_writer.writerow(['Quick', size, quick_ctr, quick_time])    
         
+        # call insertion sort 
         insert_ctr, insert_time = insertionSort( randomize(IS))
 
         with open('insertion_sort_data.csv', 'a', newline='') as csvfile:
@@ -249,8 +252,10 @@ for size in sizes:
                 csv_writer.writerow(['Sort Type','List Size','Counter #','Execution Time (s)'])
             #write data on subsequent rows               
             csv_writer.writerow(['Insertion',size, insert_ctr, insert_time])
-            
+        insert_ctr = 0
+        insert_time = 0
 
+        # call selection sort 
         select_ctr, select_time = selectionSort(randomize(SS))
 
         with open('selection_sort_data.csv', 'a', newline='') as csvfile:
