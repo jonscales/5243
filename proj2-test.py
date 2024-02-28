@@ -31,9 +31,6 @@ import csv
 import copy
 import sys
 
-
-
-
 #Sort methods
 """
 Bubble Sort O(n^2)
@@ -68,8 +65,6 @@ def selectionSort(list):
     ctr = 0 # counter for swaps
     start_time=time.time() # get start time for run
     n = len(list) - 1
-    # print(len(list))
-    # print(n)
 
     index_length = range(0, n)
     
@@ -171,25 +166,24 @@ def mergeSort(list, ctr=0, execution_time=0):
 """
 Quick Sort O(nlogn)
 """
-def quickSort(list, ctr=0, execution_time=0):
-    #ctr & time passed in as default variable set = 0 
-    
-    if len(list) <= 1:
+def quickSort(list, ctr=0, execution_time=0): #ctr & time passed in as default variable set = 0 
+    if len(list) <= 1: # base case when all lists have a single element
         return ctr, execution_time
     
     start_time=time.time() if execution_time==0 else execution_time  # get start time for run
-
-    pivot = list.pop() # takes the last value in list as pivot
+    
+    # set pivot as value of last element of list
+    pivot = list.pop() 
     
     largeList = []
     smallList = [] 
-
+    #compare element values to pivot & assign to sublists
     for item in list:
         if item <= pivot:
             smallList.append(item)
         else:
             largeList.append(item)
-          
+    # recursive calls       
     small_ctr, execution_time = quickSort(smallList, ctr+1, start_time) 
     large_ctr, execution_time = quickSort(largeList, ctr+1, start_time)
     
@@ -205,7 +199,6 @@ def randomize(list):
     random.shuffle(list)
     return list
 
-
 """ Main portion of program"""
 #Loop to make & sort lists
 # define list size
@@ -216,21 +209,14 @@ max_int = sys.maxsize
 for _ in range(10):
     for size in sizes:
         #iterate over size range to generate 4 randomly filled lists, 1 for each sort type
+        #new unsorted list created each sort iteration
         unsorted_list=[random.randint(0 , max_int) for _ in range(size) ]
         #deep copy unsorted list
         MS = copy.deepcopy(unsorted_list) # merge sort list
         QS = copy.deepcopy(unsorted_list) # quick sort list
         IS = copy.deepcopy(unsorted_list) # insertion sort list
         SS = copy.deepcopy(unsorted_list) # selection sort list
-        #print('\n Unsorted: ', unsorted_list,'\n')
-        # print('MS: ', MS,'\n')
-        # print('QS: ', QS,'\n')
-        # print('IS: ', IS,'\n')
-        # print('SS: ', SS,'\n')
 
-        #run each sort method on 10 X on its list, randomize list between runs
-        
-        #call sorts on randomized list
         # call merge sort
         merge_ctr, merge_time = mergeSort(MS)
         # write data to .csv  
