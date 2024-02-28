@@ -18,7 +18,10 @@ calculated and output as data to a .csv file for subsequent graphical analysis.
 Code Source & Assistance Reference: 
 Bubble, Insertion, Selection & Quick Sort code scripts were modified from 
 those presented by Derrick Sherrill on his youtube channel originally aired 4 years ago.
-Merge sort code was modified from chat GPT code.
+Merge sort code was modified from chat GPT code. Significant question/answer sessions using
+ChatGPT were done to learn how to return values as tuples and pass the counter variables 
+within the function calls for recursive functions.  My use of ChatGPT is to get python code
+syntax as I am still in a learning phase of working with this programming language. 
 """
 import random
 import timeit
