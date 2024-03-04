@@ -168,7 +168,7 @@ Quick Sort O(nlogn)
 """
 def quickSort(list, ctr=0, execution_time=0): #ctr & time passed in as default variable set = 0 
     if len(list) <= 1: # base case when all lists have a single element
-        return ctr, execution_time
+        return ctr, execution_time, quick_list
     
     start_time=time.time() if execution_time==0 else execution_time  # get start time for run
     
@@ -184,15 +184,74 @@ def quickSort(list, ctr=0, execution_time=0): #ctr & time passed in as default v
         else:
             largeList.append(item)
     # recursive calls       
-    small_ctr, execution_time = quickSort(smallList, ctr+1, start_time) 
-    large_ctr, execution_time = quickSort(largeList, ctr+1, start_time)
+    small_ctr, execution_time,_ = quickSort(smallList, ctr+1, start_time) 
+    large_ctr, execution_time,_ = quickSort(largeList, ctr+1, start_time)
     
-    sorted_list = smallList + [pivot] + largeList 
+    quick_list = smallList + [pivot] + largeList 
    
     end_time = time.time()
     execution_time = end_time - start_time 
     total_ctr = ctr + small_ctr + large_ctr
-    return total_ctr, execution_time     
+    return total_ctr, execution_time, quick_list    
+
+"""
+GPT Heap sort code
+"""
+def heapify(list, size, i, ctr=0, execution_time=0):
+    start_time=time.time() if execution_time==0 else execution_time  # get start time for run
+    largest = i    # Initialize largest as root
+    l_child = 2 * i + 1    # left child
+    r_child = 2 * i + 2    # right child
+
+    # Check if left child exists and is greater than root
+    if l_child < size and list[l_child] > list[largest]:
+        largest = l_child
+
+    # Check if right child exists and is greater than the largest so far
+    if r_child < size and list[r_child] > list[largest]:
+        largest = r_child
+
+    # If the largest is not the root, swap them
+    if largest != i:
+        list[i], list[largest] = list[largest], list[i]  # swap
+        
+        # Heapify the root.
+        heapify_ctr, heapify_time, list = heapify(list, size, largest, ctr+1, start_time)
+    else:
+        heapify_ctr = ctr
+        heapify_time = time.time() -start_time
+
+    return heapify_ctr, heapify_time, list
+
+def heapSort(heap_list, ctr=0, execution_time=0):
+    
+    start_time=time.time() if execution_time==0 else execution_time  # get start time for run
+    n = len(heap_list)
+
+    # Build a maxheap.
+    for i in range(n // 2 - 1, -1, -1,):
+        heapify_ctr, heapify_time, heap_list = heapify(heap_list, n, i, ctr+1, start_time)
+
+    # Extract elements one by one
+    for i in range(n - 1, 0, -1):
+        heap_list[i], heap_list[0] = heap_list[0], heap_list[i]  # swap
+        heapify_ctr, heapify_time, heap_list = heapify(heap_list, i, 0, ctr+1, start_time)
+   
+    end_time = time.time()
+    execution_time = end_time - start_time + heapify_time
+    total_ctr = ctr + heapify_ctr
+    
+    return total_ctr, execution_time, heap_list    
+
+
+"""
+counting sort
+"""
+
+""" 
+radix sort
+"""
+
 
 """ Shuffle sorted list method"""
 def randomize(list):
@@ -202,74 +261,91 @@ def randomize(list):
 """ Main portion of program"""
 #Loop to make & sort lists
 # define list size
-sizes=[1000,2000,3000,4000,5000,6000,7000]
-#sizes = [10]
+#sizes=[1000,2000,3000,4000,5000,6000,7000]
+sizes = [10]
 max_int = sys.maxsize
+merge_ctr_total = merge_time_total=0
+quick_ctr_total = quick_time_total=0
+insert_ctr_total = insert_time_total=0
+select_ctr_total = select_time_total=0
+heap_ctr_total = heap_time_total=0
+
 # iterate over sizes list to create lists of random integers for sorting
-for _ in range(10):
+for j in range(10):
     for size in sizes:
         #iterate over size range to generate 4 randomly filled lists, 1 for each sort type
         #new unsorted list created each sort iteration
-        unsorted_list=[random.randint(0 , max_int) for _ in range(size) ]
+        unsorted_list=[random.randint(0 , 100) for _ in range(size) ]
         #deep copy unsorted list
-        MS = copy.deepcopy(unsorted_list) # merge sort list
-        QS = copy.deepcopy(unsorted_list) # quick sort list
-        IS = copy.deepcopy(unsorted_list) # insertion sort list
-        SS = copy.deepcopy(unsorted_list) # selection sort list
+        # MS = copy.deepcopy(unsorted_list) # merge sort list
+        # QS = copy.deepcopy(unsorted_list) # quick sort list
+        # IS = copy.deepcopy(unsorted_list) # insertion sort list
+        # SS = copy.deepcopy(unsorted_list) # selection sort list
+        HS = copy.deepcopy(unsorted_list) # heap sort list
 
-        # call merge sort
-        merge_ctr, merge_time = mergeSort(MS)
-        # write data to .csv  
-        with open('merge_test.csv', 'a', newline='') as csvfile:
-            csv_writer = csv.writer(csvfile)
-            #write header if file is empty
-            if csvfile.tell() == 0:
-                csv_writer.writerow(['Sort Type','List Size','Counter #','Execution Time (s)'])
-            #write data on subsequent rows    
-            csv_writer.writerow(['Merge',size, merge_ctr, merge_time])
-        #reset counter & time variables
-        merge_ctr=0
-        merge_time=0
-        
-        # call quick sort      
-        quick_ctr, quick_time = quickSort(QS)
-        # write data to .csv    
-        with open('quick_test.csv', 'a', newline='') as csvfile:
-            csv_writer = csv.writer(csvfile)
-            #write header if file is empty
-            if csvfile.tell() == 0:
-                csv_writer.writerow(['Sort Type','List Size','Counter #','Execution Time (s)'])
-            #write data on subsequent rows    
-            csv_writer.writerow(['Quick', size, quick_ctr, quick_time])    
-        #reset counter & time variables
-        quick_ctr=0
-        quick_time=0
+        # # call merge sort
+        # merge_ctr, merge_time, merge_list = mergeSort(MS)
        
-        #call insertion sort 
-        insert_ctr, insert_time = insertionSort(IS)
-
-        with open('insertion_test.csv', 'a', newline='') as csvfile:
-            csv_writer = csv.writer(csvfile)
-            #write header if file is empty
-            if csvfile.tell() == 0:
-                csv_writer.writerow(['Sort Type','List Size','Counter #','Execution Time (s)'])
-            #write data on subsequent rows               
-            csv_writer.writerow(['Insertion',size, insert_ctr, insert_time])
-        #reset counter & time variables
-        insert_ctr = 0
-        insert_time = 0
+        # # calculations        
+        # merge_ctr_total += merge_ctr
+        # merge_ctr_avg = merge_ctr_total/10
+        # merge_time_total += merge_time
+        # merge_time_avg = merge_time_total/10
+        
+        # # call quick sort      
+        # quick_ctr, quick_time, quick_list = quickSort(QS)
+        # # calculations  
+        # quick_ctr_total += quick_ctr
+        # quick_ctr_avg = quick_ctr_total/10
+        # quick_time_total += quick_time
+        # quick_time_avg = quick_time_total/10
+ 
+        # #call insertion sort 
+        # insert_ctr, insert_time, insert_list = insertionSort(IS)
+        # # calculations 
+        # insert_ctr_total += insert_ctr
+        # insert_ctr_avg = insert_ctr_total/10
+        # insert_time_total += insert_time
+        # insert_time_avg = insert_time_total/10
+    
+        # # call selection sort 
+        # select_ctr, select_time, select_list = selectionSort(SS)
+        # # calculations 
+        # select_ctr_total += select_ctr
+        # select_ctr_avg = select_ctr_total/10
+        # select_time_total += select_time
+        # select_time_avg = select_time_total/10
 
         # call selection sort 
-        select_ctr, select_time = selectionSort(SS)
+        heap_ctr, heap_time, heap_list = heapSort(HS)
+        # calculations 
+        heap_ctr_total += heap_ctr
+        heap_ctr_avg = heap_ctr_total/10
+        heap_time_total += heap_time
+        heap_time_avg = heap_time_total/10
+        print("iteration ",j+1, unsorted_list)
+        print("iteration ",j+1, heap_list)
 
-        with open('selection_test.csv', 'a', newline='') as csvfile:
-            csv_writer = csv.writer(csvfile)
-            #write header if file is empty
-            if csvfile.tell() == 0:
-                csv_writer.writerow(['Sort Type','List Size','Counter #','Execution Time (s)'])
-            #write data on subsequent rows    
-            csv_writer.writerow(['Selection',size, select_ctr, select_time])  
         #reset counter & time variables
-        select_ctr=0
-        select_time=0        
+        merge_ctr = merge_time=0
+        quick_ctr = quick_time=0
+        insert_ctr = insert_time = 0
+        select_ctr = select_time=0
+        heap_ctr = heap_time=0
+    
+    
+#outside loop - send avg data to .csv file
+# write data to .csv  
+with open('sort_data.csv', 'a', newline='') as csvfile:
+    csv_writer = csv.writer(csvfile)
+    #write header if file is empty
+    if csvfile.tell() == 0:
+        csv_writer.writerow(['Sort Type','List Size','Avg Counter','Avg Execution Time (s)'])
+    #write data on subsequent rows    
+    csv_writer.writerow(['Heap',size, heap_ctr_avg, heap_time_avg])
+    # csv_writer.writerow(['Merge',size, merge_ctr_avg, merge_time_avg])
+    # csv_writer.writerow(['Quick', size, quick_ctr_avg, quick_time_avg])   
+    # csv_writer.writerow(['Insertion',size, insert_ctr_avg, insert_time_avg])
+    # csv_writer.writerow(['Selection',size, select_ctr_avg, select_time_avg])     
+ 
 
