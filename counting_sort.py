@@ -8,12 +8,13 @@ def counting_sort(arr):
     # Count the occurrences of each element
     for num in arr:
         count[num] += 1
-    print(count)
+    print("initial temp count array:", count)
+    
     # Create the sorted array
     sorted_arr = []
     for i in range(len(count)):
         sorted_arr.extend([i] * count[i])
-    
+    print("final temp count array:", count)
     return sorted_arr
 
 # Example usage:

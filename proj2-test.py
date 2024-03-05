@@ -168,17 +168,18 @@ def mergeSort(list, ctr=0, execution_time=0):
 Quick Sort O(nlogn)
 """
 def quickSort(list, ctr=0, execution_time=0): #ctr & time passed in as default variable set = 0 
-    quick_list =[]
-    if len(list) <= 1: # base case when all lists have a single element
-        return ctr, execution_time, quick_list
-    
     start_time=time.time() if execution_time==0 else execution_time  # get start time for run
+    quick_list = []
+    largeList = []
+    smallList = [] 
+    
+    if len(list) <= 1: # base case when all lists have a single element
+        quick_list = list
+        return ctr, execution_time, quick_list
     
     # set pivot as value of last element of list
     pivot = list.pop() 
-    
-    largeList = []
-    smallList = [] 
+    # print("pivot = [",pivot,"]")
     #compare element values to pivot & assign to sublists
     for item in list:
         if item <= pivot:
@@ -189,12 +190,16 @@ def quickSort(list, ctr=0, execution_time=0): #ctr & time passed in as default v
     small_ctr, execution_time, small = quickSort(smallList, ctr+1, start_time) 
     large_ctr, execution_time, large = quickSort(largeList, ctr+1, start_time)
     
-    quick_list = small + [pivot] + large 
+    quick_list = small + [pivot] + large
    
     end_time = time.time()
     execution_time = end_time - start_time 
     total_ctr = ctr + small_ctr + large_ctr
     
+    # print("quick_list: ", quick_list)
+    # print("smallList: ", smallList)
+    # print("largeList: ", largeList)
+
     return total_ctr, execution_time, quick_list    
 
 """
@@ -203,8 +208,8 @@ GPT Heap sort code
 def heapify(list, size, i, ctr=0, execution_time=0):
     start_time=time.time() if execution_time==0 else execution_time  # get start time for run
     largest = i    # Initialize largest as root
-    l_child = 2 * i + 1    # left child
-    r_child = 2 * i + 2    # right child
+    l_child = 2 * i + 1    # left child indexing from 0
+    r_child = 2 * i + 2    # right child indexing from 0
 
     # Check if left child exists and is greater than root
     if l_child < size and list[l_child] > list[largest]:
@@ -232,11 +237,11 @@ def heapSort(heap_list, ctr=0, execution_time=0):
     n = len(heap_list)
 
     # Build a maxheap.
-    for i in range(n // 2 - 1, -1, -1,):
+    for i in range(n // 2 - 1, -1, -1,): # range from last element with child to -1 decrementing each time (-1)
         heapify_ctr, heapify_time, heap_list = heapify(heap_list, n, i, ctr+1, start_time)
 
     # Extract elements one by one
-    for i in range(n - 1, 0, -1):
+    for i in range(n - 1, 0, -1): # get last element from heap list (last child = n-1) decrement each time (-1)
         heap_list[i], heap_list[0] = heap_list[0], heap_list[i]  # swap
         heapify_ctr, heapify_time, heap_list = heapify(heap_list, i, 0, ctr+1, start_time)
    
@@ -251,6 +256,7 @@ def heapSort(heap_list, ctr=0, execution_time=0):
 counting sort
 """
 
+
 """ 
 radix sort
 """
@@ -264,8 +270,8 @@ def randomize(list):
 """ Main portion of program"""
 #Loop to make & sort lists
 # define list size
-sizes=[1000,2000,3000,4000,5000,6000,7000]
-#sizes = [10]
+#sizes=[1000,2000,3000,4000,5000,6000,7000]
+sizes = [20]
 max_int = sys.maxsize
 merge_ctr_total = merge_time_total=0
 quick_ctr_total = quick_time_total=0
@@ -275,17 +281,18 @@ heap_ctr_total = heap_time_total=0
 
 # iterate over sizes list to create lists of random integers for sorting
 for size in sizes:
-    for j in range(10):
+    for j in range(1):
         #iterate over size range to generate 4 randomly filled lists, 1 for each sort type
         #new unsorted list created each sort iteration
-        unsorted_list=[random.randint(0 , 100000) for s in range(size) ]
+        unsorted_list=[random.randint(0 , 100) for s in range(size) ]
         #deep copy unsorted list
         MS = copy.deepcopy(unsorted_list) # merge sort list
         QS = copy.deepcopy(unsorted_list) # quick sort list
         IS = copy.deepcopy(unsorted_list) # insertion sort list
         SS = copy.deepcopy(unsorted_list) # selection sort list
         HS = copy.deepcopy(unsorted_list) # heap sort list
-
+        
+        print("iteration ",j+1, unsorted_list)
         # call merge sort
         merge_ctr, merge_time, merge_list = mergeSort(MS)
        
@@ -294,6 +301,7 @@ for size in sizes:
         merge_ctr_avg = merge_ctr_total/10
         merge_time_total += merge_time
         merge_time_avg = merge_time_total/10
+        print("iteration ",j+1, merge_list)
         
         # call quick sort      
         quick_ctr, quick_time, quick_list = quickSort(QS)
@@ -302,7 +310,8 @@ for size in sizes:
         quick_ctr_avg = quick_ctr_total/10
         quick_time_total += quick_time
         quick_time_avg = quick_time_total/10
- 
+        print("iteration ",j+1, quick_list)
+
         #call insertion sort 
         insert_ctr, insert_time, insert_list = insertionSort(IS)
         # calculations 
@@ -310,7 +319,8 @@ for size in sizes:
         insert_ctr_avg = insert_ctr_total/10
         insert_time_total += insert_time
         insert_time_avg = insert_time_total/10
-    
+        print("iteration ",j+1, insert_list)
+
         # call selection sort 
         select_ctr, select_time, select_list = selectionSort(SS)
         # calculations 
@@ -318,6 +328,7 @@ for size in sizes:
         select_ctr_avg = select_ctr_total/10
         select_time_total += select_time
         select_time_avg = select_time_total/10
+        print("iteration ",j+1, select_list)
 
         # call selection sort 
         heap_ctr, heap_time, heap_list = heapSort(HS)
@@ -326,8 +337,7 @@ for size in sizes:
         heap_ctr_avg = heap_ctr_total/10
         heap_time_total += heap_time
         heap_time_avg = heap_time_total/10
-        # print("iteration ",j+1, unsorted_list)
-        # print("iteration ",j+1, heap_list)
+        print("iteration ",j+1, heap_list)
 
         #reset counter & time variables
         merge_ctr = merge_time=0
