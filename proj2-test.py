@@ -313,16 +313,41 @@ def radix_sort(arr):
         
     return radix_list
 
-# Example usage:
-arr = [170, 45, 75, 90, 802, 24, 2, 66]
-radix_sort(arr)
-print("Sorted array is:", arr)
-
-
 """ Shuffle sorted list method"""
 def randomize(list):
     random.shuffle(list)
     return list
+
+""" 
+Search Methods
+"""
+"""
+Linear Search
+"""
+def linearSearch(list,val):
+    i = 0
+    while i < len(list):
+        if list[i] == val:
+            return i
+        i+=1
+    return -1
+
+
+"""
+Binary Search
+"""
+def binarySearch(list, first, last, val):
+    mid = (first + last)//2
+    if list[mid] == val:
+        return mid
+    elif first >= last:
+        return -1
+    elif val < list[mid]:
+        return binarySearch(list, first, mid-1, val)
+    else:
+        return binarySearch(list, mid+1, last, val)
+
+
 
 """ Main portion of program"""
 #Loop to make & sort lists
