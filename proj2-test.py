@@ -203,7 +203,7 @@ def quickSort(list, ctr=0, execution_time=0): #ctr & time passed in as default v
     return total_ctr, execution_time, quick_list    
 
 """
-GPT Heap sort code
+Heap sort 
 """
 def heapify(list, size, i, ctr=0, execution_time=0):
     start_time=time.time() if execution_time==0 else execution_time  # get start time for run
@@ -253,9 +253,29 @@ def heapSort(heap_list, ctr=0, execution_time=0):
 
 
 """
-counting sort
+Counting sort
 """
-
+def counting_sort(list):
+    # Find the maximum value in the array
+    max_val = max(list)
+    
+    # Create a temporaty countint list to store the count of each element
+    temp = [0] * (max_val + 1) # makes list with 11 elements all initialized to 0
+    
+    # Count the occurrences of each element
+    # puts the number of times each value occurs in the list into the temp list
+    # in the index corresponding to the value of the number (i.e. the number of times
+    # 2 appears in the list is stored in temp[2])
+    for num in list:
+        temp[num] += 1  
+    #print("initial temp list:", temp)
+    
+    # Create the sorted list
+    count_list = []
+    for i in range(len(temp)):
+        count_list.extend([i] * temp[i])
+    #print("final temp count array:", temp)
+    return count_list
 
 """ 
 radix sort
