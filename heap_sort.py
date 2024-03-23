@@ -46,10 +46,10 @@ def heapSort(heap_list, ctr=0, execution_time=0):
     for i in range(n // 2 - 1, -1, -1,): # range from last element with child to -1 decrementing each time (-1)
         heapify_ctr, heapify_time, heap_list = heapify(heap_list, n, i, ctr+1, start_time)
 
-    # Extract elements one by one
-    for i in range(n - 1, 0, -1): # get last element from heap list (last child = n-1) decrement each time (-1)
-        heap_list[i], heap_list[0] = heap_list[0], heap_list[i]  # swap
-        heapify_ctr, heapify_time, heap_list = heapify(heap_list, i, 0, ctr+1, start_time)
+    # # Extract elements one by one
+    # for i in range(n - 1, 0, -1): # get last element from heap list (last child = n-1) decrement each time (-1)
+    #     heap_list[i], heap_list[0] = heap_list[0], heap_list[i]  # swap
+    #     heapify_ctr, heapify_time, heap_list = heapify(heap_list, i, 0, ctr+1, start_time)
    
     end_time = time.time()
     execution_time = end_time - start_time + heapify_time
@@ -60,4 +60,5 @@ def heapSort(heap_list, ctr=0, execution_time=0):
 
 
 unheaped=[15, 8, 25, 50, 10, 20, 30, 75, 55]
-heapSort(unheaped)
+print(unheaped)
+print(heapSort(unheaped))

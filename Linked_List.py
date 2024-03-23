@@ -11,18 +11,43 @@ class node:
 
 class linked_list:
 	def __init__(self):
+		"""constructor method"""
 		self.head=node()
+	
+	def insertFront(self, data):
+		"""Adds new node containing 'data' to the beginning of the linked list """
+		new_node=node(data) # creates new node instance
+		new_node.next=self.head #sets new node's next to point to head 
+		self.head=new_node # makes the new node into the head node
 
-	# Adds new node containing 'data' to the end of the linked list.
-	def append(self,data):
-		new_node=node(data)
-		cur=self.head
-		while cur.next!=None:
+	def insertRear(self,data):
+		"""Adds new node containing 'data' to the end of the linked list."""
+		new_node=node(data) # creates new node instance
+		cur=self.head # creates a traversing pointer intially pointed at head node
+		while cur.next!=None: # loop to move point down list to end
 			cur=cur.next
-		cur.next=new_node
-
-	# Returns the length (integer) of the linked list.
+		cur.next=new_node # points last node to new node (new node already points to null)
+	
+	def insertInOrder(self,data):
+		"""Adds node with data in order for sorted list"""
+		new_node=node(data)  # creates new node instance
+		if self.length==0:
+			self.head=new_node	
+		else: 
+			cur=self.head # creates a traversing pointer intially pointed at head node
+			if (cur.data<self.head.data): # if new data < head node data, do a front sert
+				self.insertFront(data)
+			else:
+				while (cur.next.data<data): #traverse list until data of next node is > than data yet current node data is < data
+					cur=cur.next 
+					if(cur.next==None): # if all nodes are checked and none are > than data, insert data at last position
+						cur.next=new_node
+					else: # create connenctions to insert new node between cur and cur.next nodes
+						new_node.next=cur.next
+						cur=new_node
+		
 	def length(self):
+		"""Returns the length (integer) of the linked list."""
 		cur=self.head
 		total=0
 		while cur.next!=None:
@@ -30,8 +55,8 @@ class linked_list:
 			cur=cur.next
 		return total 
 
-	# Prints out the linked list in traditional Python list format. 
 	def display(self):
+		"""Prints out the linked list in traditional Python list format."""
 		elems=[]
 		cur_node=self.head
 		while cur_node.next!=None:
@@ -39,8 +64,8 @@ class linked_list:
 			elems.append(cur_node.data)
 		print(elems)
 
-	# Returns the value of the node at 'index'. 
 	def get(self,index):
+		"""Returns the value of the node at 'index'."""
 		if index>=self.length() or index<0: # added 'index<0' post-video
 			print("ERROR: 'Get' Index out of range!")
 			return None
@@ -51,8 +76,8 @@ class linked_list:
 			if cur_idx==index: return cur_node.data
 			cur_idx+=1
 
-	# Deletes the node at index 'index'.
 	def erase(self,index):
+		"""Deletes the node at index 'index'."""
 		if index>=self.length() or index<0: # added 'index<0' post-video
 			print("ERROR: 'Erase' Index out of range!")
 			return 
@@ -66,18 +91,15 @@ class linked_list:
 				return
 			cur_idx+=1
 
-	# Allows for bracket operator syntax (i.e. a[0] to return first item).
 	def __getitem__(self,index):
+		"""Allows for bracket operator syntax (i.e. a[0] to return first item)."""
 		return self.get(index)
 
+	def insertAt(self,index,data):
+		"""Inserts a new node at index 'index' containing data 'data'.
+		   Indices begin at 0. If the provided index is greater than or 
+		   equal to the length of the linked list the 'data' will be appended."""
 
-	#######################################################
-	# Functions added after video tutorial
-
-	# Inserts a new node at index 'index' containing data 'data'.
-	# Indices begin at 0. If the provided index is greater than or 
-	# equal to the length of the linked list the 'data' will be appended.
-	def insert(self,index,data):
 		if index>=self.length() or index<0:
 			return self.append(data)
 		cur_node=self.head
@@ -93,10 +115,11 @@ class linked_list:
 			prior_node=cur_node
 			cur_idx+=1
 
-	# Inserts the node 'node' at index 'index'. Indices begin at 0.
-	# If the 'index' is greater than or equal to the length of the linked 
-	# list the 'node' will be appended.
-	def insert_node(self,index,node):
+	
+	def insertEmptyNode(self,index,node):
+		"""Inserts the node 'node' at index 'index'. Indices begin at 0.
+		   If the 'index' is greater than or equal to the length of the linked 
+		   list the 'node' will be appended."""
 		if index<0:
 			print("ERROR: 'Erase' Index cannot be negative!")
 			return
@@ -117,11 +140,12 @@ class linked_list:
 			prior_node=cur_node
 			cur_idx+=1
 
-	# Sets the data at index 'index' equal to 'data'.
-	# Indices begin at 0. If the 'index' is greater than or equal 
-	# to the length of the linked list a warning will be printed 
-	# to the user.
+	
 	def set(self,index,data):
+		"""Sets the data at index 'index' equal to 'data'.
+		   Indices begin at 0. If the 'index' is greater than or equal 
+		   to the length of the linked list a warning will be printed 
+		   to the user."""
 		if index>=self.length() or index<0:
 			print("ERROR: 'Set' Index out of range!")
 			return
