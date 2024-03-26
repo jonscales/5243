@@ -36,15 +36,33 @@ class binary_search_tree:
 		else:
 			print("Value already in tree!")
 
-	def print_tree(self):
+	def in_order_print(self):
 		if self.root!=None:
-			self._print_tree(self.root)
+			self._in_order_print(self.root)
+	def pre_order_print(self):
+		if self.root!=None:
+			self._pre_order_print(self.root)		
+	def post_order_print(self):
+		if self.root!=None:
+			self._post_order_print(self.root)
 
-	def _print_tree(self,cur_node):
+	def _in_order_print(self,cur_node):
 		if cur_node!=None:
-			self._print_tree(cur_node.left_child)
+			self._in_order_print(cur_node.left_child)
 			print (str(cur_node.value))
-			self._print_tree(cur_node.right_child)
+			self._in_order_print(cur_node.right_child)
+	
+	def _pre_order_print(self,cur_node):
+		if cur_node!=None:
+			print (str(cur_node.value))
+			self._pre_order_print(cur_node.left_child)
+			self._pre_order_print(cur_node.right_child)
+
+	def _post_order_print(self,cur_node):
+		if cur_node!=None:
+			self._post_order_print(cur_node.left_child)
+			self._post_order_print(cur_node.right_child)		
+			print (str(cur_node.value))
 
 	def height(self):
 		if self.root!=None:
@@ -187,5 +205,11 @@ testlist1.insert(75)
 testlist1.insert(46)
 testlist1.insert(15)
 
-
-testlist1.print_tree()
+print("inorder print")
+testlist1.in_order_print()
+input("Press enter to continue")
+print("preorder print")
+testlist1.pre_order_print()
+input("Press enter to continue")
+print("postorder print")
+testlist1.post_order_print()
