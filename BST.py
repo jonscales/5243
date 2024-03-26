@@ -174,4 +174,18 @@ class binary_search_tree:
 		elif value>cur_node.value and cur_node.right_child!=None:
 			return self._search(value,cur_node.right_child)
 		return False 
-        
+
+
+testlist1=binary_search_tree()
+testlist1.insert(52)
+testlist1.insert(61)
+testlist1.insert(19)
+testlist1.insert(23)
+testlist1.insert(47)
+testlist1.insert(32)
+testlist1.insert(75)
+testlist1.insert(46)
+testlist1.insert(15)
+
+
+testlist1.print_tree()
