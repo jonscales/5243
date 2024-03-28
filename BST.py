@@ -36,15 +36,35 @@ class binary_search_tree:
 		else:
 			print("Value already in tree!")
 
-	def print_tree(self):
+	def inorder_print(self):
 		if self.root!=None:
-			self._print_tree(self.root)
+			self._inorder_print(self.root)
 
-	def _print_tree(self,cur_node):
+	def preorder_print(self):
+		if self.root!=None:
+			self._preorder_print(self.root)
+
+	def postorder_print(self):
+		if self.root!=None:
+			self._postorder_print(self.root)				
+
+	def _inorder_print(self,cur_node):
 		if cur_node!=None:
-			self._print_tree(cur_node.left_child)
+			self._inorder_print(cur_node.left_child)
 			print (str(cur_node.value))
-			self._print_tree(cur_node.right_child)
+			self._inorder_print(cur_node.right_child)
+
+	def _preorder_print(self,cur_node):
+		if cur_node!=None:
+			print (str(cur_node.value))
+			self._preorder_print(cur_node.left_child)
+			self._preorder_print(cur_node.right_child)
+
+	def _postorder_print(self,cur_node):
+		if cur_node!=None:
+			self._postorder_print(cur_node.left_child)
+			self._postorder_print(cur_node.right_child)	
+			print (str(cur_node.value))			
 
 	def height(self):
 		if self.root!=None:
@@ -174,4 +194,28 @@ class binary_search_tree:
 		elif value>cur_node.value and cur_node.right_child!=None:
 			return self._search(value,cur_node.right_child)
 		return False 
-        
+
+mybst=binary_search_tree() 
+
+mybst.insert(52)
+mybst.insert(61)
+mybst.insert(19)
+mybst.insert(23)
+mybst.insert(47)
+mybst.insert(32)
+mybst.insert(75)
+mybst.insert(46)
+mybst.insert(15)
+
+print("In order print of bst")
+mybst.inorder_print() 
+
+input("hit enter to continue")
+
+print("pre=order print of bst")
+mybst.preorder_print() 
+
+input("hit enter to continue")
+
+print("post-order print of bst")
+mybst.postorder_print() 
