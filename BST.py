@@ -36,6 +36,7 @@ class binary_search_tree:
 		else:
 			print("Value already in tree!")
 
+<<<<<<< HEAD
 	def in_order_print(self):
 		if self.root!=None:
 			self._in_order_print(self.root)
@@ -63,6 +64,37 @@ class binary_search_tree:
 			self._post_order_print(cur_node.left_child)
 			self._post_order_print(cur_node.right_child)		
 			print (str(cur_node.value))
+=======
+	def inorder_print(self):
+		if self.root!=None:
+			self._inorder_print(self.root)
+
+	def preorder_print(self):
+		if self.root!=None:
+			self._preorder_print(self.root)
+
+	def postorder_print(self):
+		if self.root!=None:
+			self._postorder_print(self.root)				
+
+	def _inorder_print(self,cur_node):
+		if cur_node!=None:
+			self._inorder_print(cur_node.left_child)
+			print (str(cur_node.value))
+			self._inorder_print(cur_node.right_child)
+
+	def _preorder_print(self,cur_node):
+		if cur_node!=None:
+			print (str(cur_node.value))
+			self._preorder_print(cur_node.left_child)
+			self._preorder_print(cur_node.right_child)
+
+	def _postorder_print(self,cur_node):
+		if cur_node!=None:
+			self._postorder_print(cur_node.left_child)
+			self._postorder_print(cur_node.right_child)	
+			print (str(cur_node.value))			
+>>>>>>> 413f5878e827789539e8ac109da078701e4a7008
 
 	def height(self):
 		if self.root!=None:
@@ -193,6 +225,7 @@ class binary_search_tree:
 			return self._search(value,cur_node.right_child)
 		return False 
 
+<<<<<<< HEAD
 
 testlist1=binary_search_tree()
 testlist1.insert(52)
@@ -213,3 +246,29 @@ testlist1.pre_order_print()
 input("Press enter to continue")
 print("postorder print")
 testlist1.post_order_print()
+=======
+mybst=binary_search_tree() 
+
+mybst.insert(52)
+mybst.insert(61)
+mybst.insert(19)
+mybst.insert(23)
+mybst.insert(47)
+mybst.insert(32)
+mybst.insert(75)
+mybst.insert(46)
+mybst.insert(15)
+
+print("In order print of bst")
+mybst.inorder_print() 
+
+input("hit enter to continue")
+
+print("pre=order print of bst")
+mybst.preorder_print() 
+
+input("hit enter to continue")
+
+print("post-order print of bst")
+mybst.postorder_print() 
+>>>>>>> 413f5878e827789539e8ac109da078701e4a7008
