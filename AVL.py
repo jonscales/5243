@@ -143,15 +143,11 @@ class AVLTree:
 
 	def delete_node(self,node):
 
-		## -----
-		# Improvements since prior lesson
-
 		# Protect against deleting a node not found in the tree
 		if node==None or self.find(node.value)==None:
 			print("Node to be deleted not found in the tree!")
 			return None 
-		## -----
-
+		
 		# returns the node with min value in tree rooted at input node
 		def min_value_node(n):
 			current=n
@@ -230,7 +226,7 @@ class AVLTree:
 			node_parent.height=1+max(self.get_height(node_parent.left_child),self.get_height(node_parent.right_child))
 
 			# begin to traverse back up the tree checking if there are
-			# any sections which now invalidate the AVL balance rules
+			# any nodes which now invalidate the AVL balance rules
 			self._inspect_deletion(node_parent)
 
 	def search(self,value):
@@ -248,8 +244,7 @@ class AVLTree:
 			return self._search(value,cur_node.right_child)
 		return False 
 
-
-	# Functions added for AVL...
+	# Functions for AVL balancing
 
 	def _inspect_insertion(self,cur_node,path=[]):
 		if cur_node.parent==None: return
@@ -357,9 +352,16 @@ avl.insert(8)
 avl.insert(3)
 avl.insert(60)
 avl.insert(55)
-avl.insert(4)
-avl.insert(64)
-avl.insert(90)
-avl.insert(100)
-avl.print_tree()
+
+#avl.print_tree()
+print(avl)
+
+avl.delete_value(50)
+print(avl)
+
+avl.delete_value(75)
+print(avl)
+avl.delete_value(3)
+print(avl)
+avl.delete_value(8)
 print(avl)
