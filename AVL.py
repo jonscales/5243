@@ -10,6 +10,7 @@ class node:
 		self.right_child=None
 		self.parent=None # pointer to parent node in tree
 		self.height=1 # height of node in tree (max dist. to leaf) NEW FOR AVL
+		self.balance=0
 
 class AVLTree:
 	def __init__(self):
@@ -20,7 +21,7 @@ class AVLTree:
 		content='\n' # to hold final string
 		cur_nodes=[self.root] # all nodes at current level
 		cur_height=self.root.height # height of nodes at current level
-		sep=' '*(2**(cur_height-1)) # variable sized separator between elements
+		sep=' '*(2**(cur_height-2)) # variable sized separator between elements
 		while True:
 			cur_height+=-1 # decrement current height
 			if len(cur_nodes)==0: break
@@ -109,6 +110,19 @@ class AVLTree:
 		left_height=self._height(cur_node.left_child,cur_height+1)
 		right_height=self._height(cur_node.right_child,cur_height+1)
 		return max(left_height,right_height)
+	
+	def balance(self):
+		if self.root!=None:
+			return self._balance(self.root,0)
+		else:
+			return 0
+
+	def _balance(self,cur_node,cur_height):
+		if cur_node==None: return cur_height
+		left_height=self._height(cur_node.left_child,cur_height+1)
+		right_height=self._height(cur_node.right_child,cur_height+1)
+		balance=left_height - right_height
+		return balance
 
 	def find(self,value):
 		if self.root!=None:
@@ -332,3 +346,20 @@ class AVLTree:
 		left=self.get_height(cur_node.left_child)
 		right=self.get_height(cur_node.right_child)
 		return cur_node.left_child if left>=right else cur_node.right_child
+	
+
+avl=AVLTree()
+avl.insert(50)
+avl.insert(75)
+avl.insert(85)
+avl.insert(10)
+avl.insert(8)
+avl.insert(3)
+avl.insert(60)
+avl.insert(55)
+avl.insert(4)
+avl.insert(64)
+avl.insert(90)
+avl.insert(100)
+avl.print_tree()
+print(avl)
