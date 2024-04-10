@@ -36,7 +36,6 @@ class binary_search_tree:
 		else:
 			print("Value already in tree!")
 
-<<<<<<< HEAD
 	def in_order_print(self):
 		if self.root!=None:
 			self._in_order_print(self.root)
@@ -64,7 +63,6 @@ class binary_search_tree:
 			self._post_order_print(cur_node.left_child)
 			self._post_order_print(cur_node.right_child)		
 			print (str(cur_node.value))
-=======
 	def inorder_print(self):
 		if self.root!=None:
 			self._inorder_print(self.root)
@@ -94,7 +92,6 @@ class binary_search_tree:
 			self._postorder_print(cur_node.left_child)
 			self._postorder_print(cur_node.right_child)	
 			print (str(cur_node.value))			
->>>>>>> 413f5878e827789539e8ac109da078701e4a7008
 
 	def height(self):
 		if self.root!=None:
@@ -225,50 +222,17 @@ class binary_search_tree:
 			return self._search(value,cur_node.right_child)
 		return False 
 
-<<<<<<< HEAD
 
-testlist1=binary_search_tree()
-testlist1.insert(52)
-testlist1.insert(61)
-testlist1.insert(19)
-testlist1.insert(23)
-testlist1.insert(47)
-testlist1.insert(32)
-testlist1.insert(75)
-testlist1.insert(46)
-testlist1.insert(15)
+wordlist=binary_search_tree()
+with open('word_50.txt','r') as file:
+	for word in file:
+		wordlist.insert(word.strip())
 
 print("inorder print")
-testlist1.in_order_print()
+wordlist.in_order_print()
 input("Press enter to continue")
 print("preorder print")
-testlist1.pre_order_print()
+wordlist.pre_order_print()
 input("Press enter to continue")
 print("postorder print")
-testlist1.post_order_print()
-=======
-mybst=binary_search_tree() 
-
-mybst.insert(52)
-mybst.insert(61)
-mybst.insert(19)
-mybst.insert(23)
-mybst.insert(47)
-mybst.insert(32)
-mybst.insert(75)
-mybst.insert(46)
-mybst.insert(15)
-
-print("In order print of bst")
-mybst.inorder_print() 
-
-input("hit enter to continue")
-
-print("pre=order print of bst")
-mybst.preorder_print() 
-
-input("hit enter to continue")
-
-print("post-order print of bst")
-mybst.postorder_print() 
->>>>>>> 413f5878e827789539e8ac109da078701e4a7008
+wordlist.post_order_print()
