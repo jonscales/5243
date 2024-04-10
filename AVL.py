@@ -10,7 +10,7 @@ class node:
 		self.right_child=None
 		self.parent=None # pointer to parent node in tree
 		self.height=1 # height of node in tree (max dist. to leaf) NEW FOR AVL
-		self.balance=0
+		self.balance_factor=0
 
 class AVLTree:
 	def __init__(self):
@@ -66,12 +66,14 @@ class AVLTree:
 		return content
 
 	def insert(self,value):
+		"""Called to insert a value into the tree"""
 		if self.root==None:
 			self.root=node(value)
 		else:
 			self._insert(value,self.root)
 
 	def _insert(self,value,cur_node):
+		"""Called recursively by the base insert function to put value into correct location"""
 		if value<cur_node.value:
 			if cur_node.left_child==None:
 				cur_node.left_child=node(value)
@@ -110,27 +112,16 @@ class AVLTree:
 		left_height=self._height(cur_node.left_child,cur_height+1)
 		right_height=self._height(cur_node.right_child,cur_height+1)
 		return max(left_height,right_height)
-	
-	def balance(self):
-		if self.root!=None:
-			return self._balance(self.root,0)
-		else:
-			return 0
-
-	def _balance(self,cur_node,cur_height):
-		if cur_node==None: return cur_height
-		left_height=self._height(cur_node.left_child,cur_height+1)
-		right_height=self._height(cur_node.right_child,cur_height+1)
-		balance=left_height - right_height
-		return balance
 
 	def find(self,value):
+		"""Called to find a value in the tree"""
 		if self.root!=None:
 			return self._find(value,self.root)
 		else:
 			return None
 
 	def _find(self,value,cur_node):
+		"""Called recursively by the base find function to find the value"""
 		if value==cur_node.value:
 			return cur_node
 		elif value<cur_node.value and cur_node.left_child!=None:
@@ -139,10 +130,12 @@ class AVLTree:
 			return self._find(value,cur_node.right_child)
 
 	def delete_value(self,value):
+		"""Called to delete a value from the tree"""
 		return self.delete_node(self.find(value))
 
 	def delete_node(self,node):
-
+		"""Called recursively by the delete_value function to delete a node with the value
+		   uses multiple helper functions to get features of the nodes"""
 		# Protect against deleting a node not found in the tree
 		if node==None or self.find(node.value)==None:
 			print("Node to be deleted not found in the tree!")
