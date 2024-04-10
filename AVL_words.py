@@ -343,14 +343,10 @@ class AVLTree:
 	
 
 avl=AVLTree()
-avl.insert('apple')
-avl.insert('box')
-avl.insert('revolver')
-avl.insert('revolve')
-avl.insert('document')
-avl.insert('pencil')
-avl.insert('zebra')
-avl.insert('lion')
+with open('words_50.txt','r') as file:
+    for word in file:
+        avl.insert(word.strip())
+
 
 avl.print_tree()
 print(avl)
