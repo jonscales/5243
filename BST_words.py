@@ -3,6 +3,11 @@ Binary Search Tree Code
 Code copied from bfaure/Python3_Data_Structures GitHub
 https://github.com/bfaure/Python3_Data_Structures/blob/master/Binary_Search_Tree/main.py
 """
+import os
+
+script_dir=os.path.dirname(os.path.abspath(__file__))
+outpath=os.path.join(script_dir, 'mybst.dot')
+
 class node:
 	def __init__(self,word=None):
 		self.word=word
@@ -221,65 +226,40 @@ class binary_search_tree:
 			return self._search(word,cur_node.left_child)
 		elif word>cur_node.word and cur_node.right_child!=None:
 			return self._search(word,cur_node.right_child)
-		return False 
+		return False
 	
-	# def __repr__(self):
-	# 	"""function to display the tree sort of """
-	# 	if self.root==None: return ''
-	# 	content='\n' # to hold final string
-	# 	cur_nodes=[self.root] # all nodes at current level
-	# 	cur_height=self.root.height # height of nodes at current level
-	# 	sep=' '*(2**(cur_height-1)) # variable sized separator between elements
-	# 	while True:
-	# 		cur_height+=-1 # decrement current height
-	# 		if len(cur_nodes)==0: break
-	# 		cur_row=' '
-	# 		next_row=''
-	# 		next_nodes=[]
-
-	# 		if all(n is None for n in cur_nodes):
-	# 			break
-
-	# 		for n in cur_nodes:
-
-	# 			if n==None:
-	# 				cur_row+='   '+sep
-	# 				next_row+='   '+sep
-	# 				next_nodes.extend([None,None])
-	# 				continue
-
-	# 			if n.word!=None:       
-	# 				buf=' '*int((5-len(str(n.word)))/2)
-	# 				cur_row+='%s%s%s'%(buf,str(n.word),buf)+sep
-	# 			else:
-	# 				cur_row+=' '*5+sep
-
-	# 			if n.left_child!=None:  
-	# 				next_nodes.append(n.left_child)
-	# 				next_row+=' /'+sep
-	# 			else:
-	# 				next_row+='  '+sep
-	# 				next_nodes.append(None)
-
-	# 			if n.right_child!=None: 
-	# 				next_nodes.append(n.right_child)
-	# 				next_row+='\ '+sep
-	# 			else:
-	# 				next_row+='  '+sep
-	# 				next_nodes.append(None)
-
-	# 		content+=(cur_height*'   '+cur_row+'\n'+cur_height*'   '+next_row+'\n')
-	# 		cur_nodes=next_nodes
-	# 		sep=' '*int(len(sep)/2) # cut separator size in half
-	# 	return content
+	def graphviz_get_ids(self, node, viz_out):
+		if node:
+			self.graphviz_get_ids(node.left_child, viz_out)
+			viz_out.write(" node{} [label=\"{}\"];\n".format(id(node), node.word))
+			self.graphviz_get_ids(node.right_child, viz_out)
+			viz_out.write(" node{} [label=\"{}\"];\n".format(id(node), node.word))
+			
+	def graphviz_make_connections(self, node, viz_out):
+		if node:
+			if node.left_child:
+				viz_out.write("  node{} -> node{};\n".format(id(node), id(node.left_child)))
+			if node.right_child:
+				viz_out.write("  node{} -> node{};\n".format(id(node), id(node.right_child)))
+				self.graphviz_make_connections(node.left_child, viz_out)
+				self.graphviz_make_connections(node.right_child, viz_out)
+				
+	def graphviz_out(self,filename):
+		with open(filename, 'w') as viz_out:
+			viz_out.write("digraph g { \n")
+			self.graphviz_get_ids(self.root, viz_out)
+			self.graphviz_make_connections(self.root, viz_out)
+			viz_out.write("} \n")
+			
+	
 
 wordlist=binary_search_tree()
 with open('words_50.txt','r') as file:
 	for word in file:
-		wordlist.insert(word.strip())
+		wordlist.insert(word.strip().lower())
 
-#print(wordlist)
-#input("press enter to continue")
+wordlist.graphviz_out(outpath)
+
 print("inorder print")
 wordlist.in_order_print()
 input("Press enter to continue")
