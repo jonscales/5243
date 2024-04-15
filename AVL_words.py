@@ -3,7 +3,13 @@ AVL Tree Code
 Code copied from bfaure/Python3_Data_Structures GitHub
 https://github.com/bfaure/Python3_Data_Structures/blob/master/AVL_Tree/main.py
 """
+import os
+
+script_dir=os.path.dirname(os.path.abspath(__file__))
+outpath=os.path.join(script_dir, 'myavl.dot')
+
 class node:
+	node_counter = 0
 	def __init__(self,word=None):
 		self.word=word
 		self.left_child=None
@@ -11,6 +17,8 @@ class node:
 		self.parent=None # pointer to parent node in tree
 		self.height=1 # height of node in tree (max dist. to leaf) NEW FOR AVL
 		self.balance_factor=0 # store a balance factor calculated from the height calculations
+		self.node_id=node.node_counter
+		node.node_counter +=1
 
 class AVLTree:
 	def __init__(self):
@@ -341,13 +349,36 @@ class AVLTree:
 		right=self.get_height(cur_node.right_child)
 		return cur_node.left_child if left>=right else cur_node.right_child
 	
+	def graphviz_get_ids(self, node, viz_out):
+		if node:
+			self.graphviz_get_ids(node.left_child, viz_out)
+			viz_out.write(" node{} [label=\"{} ({})\"];\n".format(node.node_id, node.word, node.node_id))
+			self.graphviz_get_ids(node.right_child, viz_out)
+			#viz_out.write(" node{} [label=\"{} ({})\"];\n".format(node.node_id, node.word, node.node_id))
+			
+	def graphviz_make_connections(self, node, viz_out):
+		if node:
+			if node.left_child:
+				viz_out.write("  node{} -> node{};\n".format(node.node_id, node.left_child.node_id))
+				self.graphviz_make_connections(node.left_child, viz_out)
+			if node.right_child:
+				viz_out.write("  node{} -> node{};\n".format(node.node_id, node.right_child.node_id))
+				self.graphviz_make_connections(node.right_child, viz_out)
+				
+	def graphviz_out(self,filename):
+		with open(filename, 'w') as viz_out:
+			viz_out.write("digraph g { \n")
+			self.graphviz_get_ids(self.root, viz_out)
+			self.graphviz_make_connections(self.root, viz_out)
+			viz_out.write("} \n")
+	
 
 avl=AVLTree()
 with open('words_50.txt','r') as file:
     for word in file:
-        avl.insert(word.strip())
+        avl.insert(word.strip().lower())
 
-
+avl.graphviz_out(outpath)
 avl.print_tree()
-print(avl)
+#print(avl)
 
