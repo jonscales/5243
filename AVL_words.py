@@ -106,10 +106,10 @@ class AVLTree:
 		if self.root!=None:
 			self._print_tree(self.root)
 
-	def _print_tree(self,cur_node):
+	def _print_tree(self,cur_node):#this only does an inorder print - add pre&post order print methods
 		if cur_node!=None:
 			self._print_tree(cur_node.left_child)
-			print ('%s, h=%d'%(str(cur_node.word),cur_node.height))
+			print ('%s, h=%d'%(str(cur_node.word),cur_node.height)) #need to add balance factor in here
 			self._print_tree(cur_node.right_child)
 
 	def height(self):
