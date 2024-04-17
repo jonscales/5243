@@ -9,16 +9,20 @@ script_dir=os.path.dirname(os.path.abspath(__file__))
 outpath=os.path.join(script_dir, 'mybst.dot')
 
 class node:
+	node_counter = 0
 	def __init__(self,word=None):
 		self.word=word
 		self.left_child=None
 		self.right_child=None
 		self.parent=None # pointer to parent node in tree
 		self.height=1
+		self.node_id=node.node_counter
+		node.node_counter +=1
 
 class binary_search_tree:
 	def __init__(self):
 		self.root=None
+		self.node_id=0
 		
 	def insert(self,word):
 		if self.root==None:
@@ -201,17 +205,17 @@ class binary_search_tree:
 	def graphviz_get_ids(self, node, viz_out):
 		if node:
 			self.graphviz_get_ids(node.left_child, viz_out)
-			viz_out.write(" node{} [label=\"{}\"];\n".format(id(node), node.word))
+			viz_out.write(" node{} [label=\"{} ({})\"];\n".format(node.node_id, node.word, node.node_id))
 			self.graphviz_get_ids(node.right_child, viz_out)
-			viz_out.write(" node{} [label=\"{}\"];\n".format(id(node), node.word))
+			#viz_out.write(" node{} [label=\"{} ({})\"];\n".format(node.node_id, node.word, node.node_id))
 			
 	def graphviz_make_connections(self, node, viz_out):
 		if node:
 			if node.left_child:
-				viz_out.write("  node{} -> node{};\n".format(id(node), id(node.left_child)))
-			if node.right_child:
-				viz_out.write("  node{} -> node{};\n".format(id(node), id(node.right_child)))
+				viz_out.write("  node{} -> node{};\n".format(node.node_id, node.left_child.node_id))
 				self.graphviz_make_connections(node.left_child, viz_out)
+			if node.right_child:
+				viz_out.write("  node{} -> node{};\n".format(node.node_id, node.right_child.node_id))
 				self.graphviz_make_connections(node.right_child, viz_out)
 				
 	def graphviz_out(self,filename):
@@ -226,15 +230,15 @@ class binary_search_tree:
 wordlist=binary_search_tree()
 with open('words_50.txt','r') as file:
 	for word in file:
-		wordlist.insert(word.strip().lower())
+		wordlist.insert(word.strip().upper())
 
 wordlist.graphviz_out(outpath)
 
 print("inorder print")
 wordlist.in_order_print()
-input("Press enter to continue")
-print("preorder print")
-wordlist.pre_order_print()
-input("Press enter to continue")
-print("postorder print")
-wordlist.post_order_print()
+# input("Press enter to continue")
+# print("preorder print")
+# wordlist.pre_order_print()
+# input("Press enter to continue")
+# print("postorder print")
+# wordlist.post_order_print()
