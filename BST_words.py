@@ -4,7 +4,7 @@ Code copied from bfaure/Python3_Data_Structures GitHub
 https://github.com/bfaure/Python3_Data_Structures/blob/master/Binary_Search_Tree/main.py
 """
 import os
-
+"""This allows specification of a path for the '.dot' output for graphviz"""
 script_dir=os.path.dirname(os.path.abspath(__file__))
 outpath=os.path.join(script_dir, 'mybst.dot')
 
@@ -41,7 +41,8 @@ class binary_search_tree:
 				self._insert(word,cur_node.right_child)
 		else:
 			print("word already in tree!")
-
+	
+	#public methods for prints
 	def in_order_print(self):
 		if self.root!=None:
 			self._in_order_print(self.root)
@@ -52,6 +53,7 @@ class binary_search_tree:
 		if self.root!=None:
 			self._post_order_print(self.root)
 
+	#private recursive print methods called by public methods above
 	def _in_order_print(self,cur_node):
 		if cur_node!=None:
 			self._in_order_print(cur_node.left_child)
@@ -69,36 +71,7 @@ class binary_search_tree:
 			self._post_order_print(cur_node.left_child)
 			self._post_order_print(cur_node.right_child)		
 			print (str(cur_node.word))
-	def inorder_print(self):
-		if self.root!=None:
-			self._inorder_print(self.root)
-
-	def preorder_print(self):
-		if self.root!=None:
-			self._preorder_print(self.root)
-
-	def postorder_print(self):
-		if self.root!=None:
-			self._postorder_print(self.root)				
-
-	def _inorder_print(self,cur_node):
-		if cur_node!=None:
-			self._inorder_print(cur_node.left_child)
-			print (str(cur_node.word))
-			self._inorder_print(cur_node.right_child)
-
-	def _preorder_print(self,cur_node):
-		if cur_node!=None:
-			print (str(cur_node.word))
-			self._preorder_print(cur_node.left_child)
-			self._preorder_print(cur_node.right_child)
-
-	def _postorder_print(self,cur_node):
-		if cur_node!=None:
-			self._postorder_print(cur_node.left_child)
-			self._postorder_print(cur_node.right_child)	
-			print (str(cur_node.word))			
-
+	
 	def height(self):
 		if self.root!=None:
 			return self._height(self.root,0)
@@ -130,15 +103,11 @@ class binary_search_tree:
 
 	def delete_node(self,node):
 
-		## -----
-		# Improvements since prior lesson
-
 		# Protect against deleting a node not found in the tree
 		if node==None or self.find(node.word)==None:
 			print("Node to be deleted not found in the tree!")
 			return None 
-		## -----
-
+		
 		# returns the node with min word in tree rooted at input node
 		def min_word_node(n):
 			current=n
@@ -228,6 +197,7 @@ class binary_search_tree:
 			return self._search(word,cur_node.right_child)
 		return False
 	
+	#GraphViz output generation for visualization of node structures
 	def graphviz_get_ids(self, node, viz_out):
 		if node:
 			self.graphviz_get_ids(node.left_child, viz_out)
@@ -251,7 +221,7 @@ class binary_search_tree:
 			self.graphviz_make_connections(self.root, viz_out)
 			viz_out.write("} \n")
 			
-	
+#Main Program	
 
 wordlist=binary_search_tree()
 with open('words_50.txt','r') as file:
