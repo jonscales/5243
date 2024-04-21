@@ -79,8 +79,10 @@ class AVLTree:
 		"""Called to insert a word into the tree"""
 		if self.root==None:
 			self.root=node(word)
+			self.update_balfactor(self.root)
 		else:
 			self._insert(word,self.root)
+			
 
 	def _insert(self,word,cur_node):
 		"""Called recursively by the base insert function to put word into correct location
@@ -109,7 +111,7 @@ class AVLTree:
 	def _print_tree(self,cur_node):#this only does an inorder print - add pre&post order print methods
 		if cur_node!=None:
 			self._print_tree(cur_node.left_child)
-			print ('%s, h=%d'%(str(cur_node.word),cur_node.height)) #need to add balance factor in here
+			print ('%s, h=%d, bf=%d'%(str(cur_node.word),cur_node.height, cur_node.balance_factor)) #need to add balance factor in here
 			self._print_tree(cur_node.right_child)
 
 	def height(self):
@@ -121,12 +123,27 @@ class AVLTree:
 
 	def _height(self,cur_node,cur_height):
 		"""recursive height function continually passes in child nodes until reaching leaf
-		   and adds height to node's height parameter. returns greates of left or right path"""
+		   and adds height to node's height parameter. returns greatest of left or right path"""
 		if cur_node==None: return cur_height
 		left_height=self._height(cur_node.left_child,cur_height+1)
 		right_height=self._height(cur_node.right_child,cur_height+1)
 		return max(left_height,right_height)
+	
+	def update_height(self, cur_node):
+		left_height = cur_node.left_child.height if cur_node.left_child else 0
+		right_height =cur_node.right_child.height if cur_node.right_child else 0 
+		cur_node.height = 1 + max(left_height, right_height)
 
+	def update_balfactor(self,cur_node):
+		left_height = cur_node.left_child.height if cur_node.left_child else 0
+		right_height =cur_node.right_child.height if cur_node.right_child else 0 
+		cur_node.balance_factor = left_height - right_height
+
+	def update_H_BF(self, cur_node):
+		self.update_height(cur_node)
+		self.update_balfactor(cur_node)
+
+	
 	def find(self,word):
 		"""Called to find a word in the tree"""
 		if self.root!=None:
@@ -263,6 +280,7 @@ class AVLTree:
 		if abs(left_height-right_height)>1:
 			path=[cur_node.parent]+path
 			self._rebalance_node(path[0],path[1],path[2])
+
 			return
 
 		new_height=1+cur_node.height 
@@ -318,6 +336,9 @@ class AVLTree:
 			self.get_height(z.right_child))
 		y.height=1+max(self.get_height(y.left_child),
 			self.get_height(y.right_child))
+		
+		self.update_balfactor(z)
+		self.update_balfactor(y)
 
 	def _left_rotate(self,z):
 		sub_root=z.parent 
@@ -339,6 +360,9 @@ class AVLTree:
 			self.get_height(z.right_child))
 		y.height=1+max(self.get_height(y.left_child),
 			self.get_height(y.right_child))
+		
+		self.update_balfactor(z)
+		self.update_balfactor(y)
 
 	def get_height(self,cur_node):
 		if cur_node==None: return 0
@@ -380,5 +404,6 @@ with open('words_50.txt','r') as file:
 
 avl.graphviz_out(outpath)
 avl.print_tree()
+print('Tree height is : ', avl.height())
 #print(avl)
 
