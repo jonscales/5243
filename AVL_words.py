@@ -24,6 +24,8 @@ class AVLTree:
 	def __init__(self):
 		"""constructor method"""
 		self.root=None
+		self.num_nodes = 0
+		self.sum_of_heights = 0
 
 	def __repr__(self):
 		"""function to display the tree sort of """
@@ -77,16 +79,21 @@ class AVLTree:
 
 	def insert(self,word):
 		"""Called to insert a word into the tree"""
+		inTree=False
 		if self.root==None:
 			self.root=node(word)
 			self.update_balfactor(self.root)
+			self.num_nodes+=1
 		else:
 			self._insert(word,self.root)
+			if inTree == False:
+				self.num_nodes += 1
 			
 
 	def _insert(self,word,cur_node):
 		"""Called recursively by the base insert function to put word into correct location
 			will not insert duplicate words"""
+		
 		if word<cur_node.word:
 			if cur_node.left_child==None:
 				cur_node.left_child=node(word)
@@ -94,6 +101,7 @@ class AVLTree:
 				self._inspect_insertion(cur_node.left_child)
 			else:
 				self._insert(word,cur_node.left_child)
+				
 		elif word>cur_node.word:
 			if cur_node.right_child==None:
 				cur_node.right_child=node(word)
@@ -103,6 +111,8 @@ class AVLTree:
 				self._insert(word,cur_node.right_child)
 		else:
 			print("word already in tree!")
+			inTree = True
+			return inTree
 
 	def print_tree(self):
 		if self.root!=None:
@@ -113,7 +123,24 @@ class AVLTree:
 			self._print_tree(cur_node.left_child)
 			print ('%s, h=%d, bf=%d'%(str(cur_node.word),cur_node.height, cur_node.balance_factor)) #need to add balance factor in here
 			self._print_tree(cur_node.right_child)
-
+	
+	def avg_height(self):
+		return self.sum_of_heights/self.num_nodes
+		
+	def height_sum(self):
+		if self.root==None:
+			self.sum_of_heights = 0
+		else:
+			self._height_sum(self.root)
+		return self.sum_of_heights
+			
+	def _height_sum(self, cur_node):
+		if cur_node != None:
+			self.sum_of_heights += cur_node.height
+			self._height_sum(cur_node.left_child)
+			self._height_sum(cur_node.right_child)
+		
+							
 	def height(self):
 		""" called to see if a tree exits, if so recursively calls _height()"""
 		if self.root!=None:
@@ -376,7 +403,7 @@ class AVLTree:
 	def graphviz_get_ids(self, node, viz_out):
 		if node:
 			self.graphviz_get_ids(node.left_child, viz_out)
-			viz_out.write(" node{} [label=\"{} ({})\"];\n".format(node.node_id, node.word, node.node_id))
+			viz_out.write(" node{} [label=\"{}-{}, H={}, BF={}\"];\n".format(node.node_id, node.node_id, node.word, node.height, node.balance_factor))
 			self.graphviz_get_ids(node.right_child, viz_out)
 			#viz_out.write(" node{} [label=\"{} ({})\"];\n".format(node.node_id, node.word, node.node_id))
 			
@@ -405,5 +432,8 @@ with open('words_50.txt','r') as file:
 avl.graphviz_out(outpath)
 avl.print_tree()
 print('Tree height is : ', avl.height())
+print('The number of nodes in this AVL tree is : ', avl.num_nodes)
+print('Sum of all node heights is : ', avl.height_sum())
+print('Average node height is : ', avl.avg_height())
 #print(avl)
 
