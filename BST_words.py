@@ -4,33 +4,48 @@ Code copied from bfaure/Python3_Data_Structures GitHub
 https://github.com/bfaure/Python3_Data_Structures/blob/master/Binary_Search_Tree/main.py
 """
 import os
+import math
+
 """This allows specification of a path for the '.dot' output for graphviz"""
 script_dir=os.path.dirname(os.path.abspath(__file__))
 outpath=os.path.join(script_dir, 'mybst.dot')
 
 class node:
 	node_counter = 0
-	def __init__(self,word=None):
-		self.word=word
-		self.left_child=None
-		self.right_child=None
-		self.parent=None # pointer to parent node in tree
-		self.height=1
-		self.node_id=node.node_counter
-		node.node_counter +=1
+	def __init__(self,word = None):
+		self.word = word
+		self.left_child = None
+		self.right_child = None
+		self.parent = None # pointer to parent node in tree
+		self.height = 1
+		self.balance_factor = 0
+		self.node_id = node.node_counter
+		node.node_counter += 1
 
 class binary_search_tree:
 	def __init__(self):
-		self.root=None
-		self.node_id=0
+		self.root = None
+		self.node_id = 0
+		self.num_nodes = 0
+		self.sum_of_heights = 0
 		
 	def insert(self,word):
-		if self.root==None:
+		inTree=False
+		if self.root == None:
 			self.root=node(word)
+			self.num_nodes += 1
+			self.update_height(self.root)
+			self.update_balfactor(self.root)
+			
 		else:
 			self._insert(word,self.root)
+			if inTree == False:
+				self.num_nodes += 1
+		self.update_height(self.root)
+		self.update_balfactor(self.root)
 
 	def _insert(self,word,cur_node):
+		inTree=False
 		if word<cur_node.word:
 			if cur_node.left_child==None:
 				cur_node.left_child=node(word)
@@ -45,6 +60,9 @@ class binary_search_tree:
 				self._insert(word,cur_node.right_child)
 		else:
 			print("word already in tree!")
+			inTree = True # used to keep the node count from being incremented 
+	
+		return inTree
 	
 	#public methods for prints
 	def in_order_print(self):
@@ -61,12 +79,12 @@ class binary_search_tree:
 	def _in_order_print(self,cur_node):
 		if cur_node!=None:
 			self._in_order_print(cur_node.left_child)
-			print (str(cur_node.word))
+			print ('%d- %s, h=%d, bf=%d'%(cur_node.node_id, str(cur_node.word),cur_node.height, cur_node.balance_factor))
 			self._in_order_print(cur_node.right_child)
 	
 	def _pre_order_print(self,cur_node):
 		if cur_node!=None:
-			print (str(cur_node.word))
+			print ('%d- %s, h=%d, bf=%d'%(cur_node.node_id, str(cur_node.word),cur_node.height, cur_node.balance_factor))
 			self._pre_order_print(cur_node.left_child)
 			self._pre_order_print(cur_node.right_child)
 
@@ -74,7 +92,11 @@ class binary_search_tree:
 		if cur_node!=None:
 			self._post_order_print(cur_node.left_child)
 			self._post_order_print(cur_node.right_child)		
-			print (str(cur_node.word))
+			print ('%d- %s, h=%d, bf=%d'%(cur_node.node_id, str(cur_node.word),cur_node.height, cur_node.balance_factor))
+
+	def complexity(self):
+		"""Returns the complexity of O(logn) for the size of the tree (n)"""
+		return "{:.2f}".format(math.log(self.num_nodes, 2))
 	
 	def height(self):
 		if self.root!=None:
@@ -83,10 +105,52 @@ class binary_search_tree:
 			return 0
 
 	def _height(self,cur_node,cur_height):
-		if cur_node==None: return cur_height
+		if cur_node==None: 
+			return cur_height
 		left_height=self._height(cur_node.left_child,cur_height+1)
 		right_height=self._height(cur_node.right_child,cur_height+1)
 		return max(left_height,right_height)
+	
+	def avg_height(self):
+		"""Returns the average height of the nodes"""
+		return self.sum_of_heights/self.num_nodes
+		
+	def height_sum(self):
+		""" will calculate a sum of the heights of all nodes in a tree. Is passed the tree itself
+			then recursively calls each child until reaching leaf nodes. The sum of heights is stored
+			as an attribute of the tree. The function also returns the value"""
+		if self.root==None:
+			self.sum_of_heights = 0
+		else:
+			self._height_sum(self.root)
+		return self.sum_of_heights
+			
+	def _height_sum(self, cur_node):
+		""" recursive height summation method called from the height_sum(root) method"""
+		if cur_node != None:
+			self.sum_of_heights += cur_node.height
+			self._height_sum(cur_node.left_child)
+			self._height_sum(cur_node.right_child)
+	
+	def update_height(self, cur_node):
+		"""Updates the node's height attribute after any insertion, deletion, 
+			or rebalancing """
+		# if cur_node == None:
+		# 	return 0
+		left_height = cur_node.left_child.height if cur_node.left_child else 0
+		right_height =cur_node.right_child.height if cur_node.right_child else 0 
+		cur_node.height = 1 + max(left_height, right_height)
+		#return cur_node.height
+
+	def update_balfactor(self,cur_node):
+		"""Updates the balance factor attribute of a node after any insertion,
+			deletion, or rebalancing event"""
+		# if cur_node == None:
+		# 	return 0
+		left_height = cur_node.left_child.height if cur_node.left_child else 0
+		right_height =cur_node.right_child.height if cur_node.right_child else 0 
+		cur_node.balance_factor = left_height - right_height
+		#return cur_node.balance_factor
 
 	def find(self,word):
 		if self.root!=None:
@@ -146,6 +210,7 @@ class binary_search_tree:
 					node_parent.left_child=None
 				else:
 					node_parent.right_child=None
+
 			else:
 				self.root=None
 
@@ -158,8 +223,6 @@ class binary_search_tree:
 			else:
 				child=node.right_child
 
-			# Added this if statement post-video, previously if you 
-			# deleted the root node it would delete entire tree.
 			if node_parent!=None:
 				# replace the node to be deleted with its child
 				if node_parent.left_child==node:
@@ -185,6 +248,10 @@ class binary_search_tree:
 			# delete the inorder successor now that it's word was
 			# copied into the other node
 			self.delete_node(successor)
+
+		#call update methods to update height and balance factor	
+		self.update_height(node.parent)
+		self.update_balfactor(node.parent)
 
 	def search(self,word):
 		if self.root!=None:
@@ -227,15 +294,21 @@ class binary_search_tree:
 			
 #Main Program	
 
-wordlist=binary_search_tree()
+wordBST=binary_search_tree()
 with open('words_50.txt','r') as file:
 	for word in file:
-		wordlist.insert(word.strip().upper())
+		wordBST.insert(word.strip().upper())
 
-wordlist.graphviz_out(outpath)
+wordBST.graphviz_out(outpath)
 
 print("inorder print")
-wordlist.in_order_print()
+wordBST.in_order_print()
+# Perform analysis of the tree
+print('The number of nodes in this AVL tree is : ', wordBST.num_nodes)
+print('Tree height is : ', wordBST.height())
+print('O(log n) complexity value for this tree is : ', wordBST.complexity())
+print('The total sum of all node heights is : ', wordBST.height_sum())
+print('The average node height is : ', wordBST.avg_height())
 # input("Press enter to continue")
 # print("preorder print")
 # wordlist.pre_order_print()

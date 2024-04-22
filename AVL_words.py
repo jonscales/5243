@@ -190,16 +190,22 @@ class AVLTree:
 	def update_height(self, cur_node):
 		"""Updates the node's height attribute after any insertion, deletion, 
 			or rebalancing """
+		if cur_node== None:
+			return 0
 		left_height = cur_node.left_child.height if cur_node.left_child else 0
 		right_height =cur_node.right_child.height if cur_node.right_child else 0 
 		cur_node.height = 1 + max(left_height, right_height)
+		return cur_node.height
 
 	def update_balfactor(self,cur_node):
 		"""Updates the balance factor attribute of a node after any insertion,
 			deletion, or rebalancing event"""
+		if cur_node == None:
+			return 0
 		left_height = cur_node.left_child.height if cur_node.left_child else 0
 		right_height =cur_node.right_child.height if cur_node.right_child else 0 
 		cur_node.balance_factor = left_height - right_height
+		return cur_node.balance_factor
 
 	def update_H_BF(self, cur_node):
 		""" will subsequently call both the update_height and update_balance factor methods"""
