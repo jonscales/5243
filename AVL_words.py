@@ -4,6 +4,7 @@ Code copied from bfaure/Python3_Data_Structures GitHub
 https://github.com/bfaure/Python3_Data_Structures/blob/master/AVL_Tree/main.py
 """
 import os
+import math
 
 script_dir=os.path.dirname(os.path.abspath(__file__))
 outpath=os.path.join(script_dir, 'myavl.dot')
@@ -124,6 +125,9 @@ class AVLTree:
 			print ('%s, h=%d, bf=%d'%(str(cur_node.word),cur_node.height, cur_node.balance_factor)) #need to add balance factor in here
 			self._print_tree(cur_node.right_child)
 	
+	def complex(self):
+		return "{:.2f}".format(math.log(self.num_nodes, 2))
+	
 	def avg_height(self):
 		return self.sum_of_heights/self.num_nodes
 		
@@ -139,7 +143,7 @@ class AVLTree:
 			self.sum_of_heights += cur_node.height
 			self._height_sum(cur_node.left_child)
 			self._height_sum(cur_node.right_child)
-		
+			
 							
 	def height(self):
 		""" called to see if a tree exits, if so recursively calls _height()"""
@@ -425,13 +429,14 @@ class AVLTree:
 	
 
 avl=AVLTree()
-with open('words_50.txt','r') as file:
+with open('words.txt','r') as file:
     for word in file:
         avl.insert(word.strip().lower())
 
 avl.graphviz_out(outpath)
 avl.print_tree()
 print('Tree height is : ', avl.height())
+print('O(log n) for this tree is : ', avl.complex())
 print('The number of nodes in this AVL tree is : ', avl.num_nodes)
 print('Sum of all node heights is : ', avl.height_sum())
 print('Average node height is : ', avl.avg_height())
