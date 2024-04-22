@@ -28,71 +28,6 @@ class binary_search_tree:
 		self.node_id = 0
 		self.num_nodes = 0
 		self.sum_of_heights = 0
-		
-	def insert(self,word):
-		inTree=False
-		if self.root == None:
-			self.root=node(word)
-			self.num_nodes += 1
-			self.update_height(self.root)
-			self.update_balfactor(self.root)
-			
-		else:
-			self._insert(word,self.root)
-			if inTree == False:
-				self.num_nodes += 1
-		self.update_height(self.root)
-		self.update_balfactor(self.root)
-
-	def _insert(self,word,cur_node):
-		inTree=False
-		if word<cur_node.word:
-			if cur_node.left_child==None:
-				cur_node.left_child=node(word)
-				cur_node.left_child.parent=cur_node # set parent
-			else:
-				self._insert(word,cur_node.left_child)
-		elif word>cur_node.word:
-			if cur_node.right_child==None:
-				cur_node.right_child=node(word)
-				cur_node.right_child.parent=cur_node # set parent
-			else:
-				self._insert(word,cur_node.right_child)
-		else:
-			print("word already in tree!")
-			inTree = True # used to keep the node count from being incremented 
-	
-		return inTree
-	
-	#public methods for prints
-	def in_order_print(self):
-		if self.root!=None:
-			self._in_order_print(self.root)
-	def pre_order_print(self):
-		if self.root!=None:
-			self._pre_order_print(self.root)		
-	def post_order_print(self):
-		if self.root!=None:
-			self._post_order_print(self.root)
-
-	#private recursive print methods called by public methods above
-	def _in_order_print(self,cur_node):
-		if cur_node!=None:
-			self._in_order_print(cur_node.left_child)
-			print ('%d- %s, h=%d, bf=%d'%(cur_node.node_id, str(cur_node.word),cur_node.height, cur_node.balance_factor))
-			self._in_order_print(cur_node.right_child)
-	
-	def _pre_order_print(self,cur_node):
-		if cur_node!=None:
-			print ('%d- %s, h=%d, bf=%d'%(cur_node.node_id, str(cur_node.word),cur_node.height, cur_node.balance_factor))
-			self._pre_order_print(cur_node.left_child)
-			self._pre_order_print(cur_node.right_child)
-
-	def _post_order_print(self,cur_node):
-		if cur_node!=None:
-			self._post_order_print(cur_node.left_child)
-			self._post_order_print(cur_node.right_child)		
-			print ('%d- %s, h=%d, bf=%d'%(cur_node.node_id, str(cur_node.word),cur_node.height, cur_node.balance_factor))
 
 	def complexity(self):
 		"""Returns the complexity of O(logn) for the size of the tree (n)"""
@@ -150,7 +85,73 @@ class binary_search_tree:
 		left_height = cur_node.left_child.height if cur_node.left_child else 0
 		right_height =cur_node.right_child.height if cur_node.right_child else 0 
 		cur_node.balance_factor = left_height - right_height
-		#return cur_node.balance_factor
+		#return cur_node.balance_factor		
+	def insert(self,word):
+		inTree=False
+		if self.root == None:
+			self.root=node(word)
+			self.num_nodes += 1
+			self.update_height(self.root)
+			self.update_balfactor(self.root)
+			
+		else:
+			self._insert(word,self.root)
+			if inTree == False:
+				self.num_nodes += 1
+				self.update_height(self.root)
+				self.update_balfactor(self.root)
+
+	def _insert(self,word,cur_node):
+		inTree=False
+		if word<cur_node.word:
+			if cur_node.left_child==None:
+				cur_node.left_child=node(word)
+				cur_node.left_child.parent=cur_node # set parent
+			else:
+				self._insert(word,cur_node.left_child)
+		elif word>cur_node.word:
+			if cur_node.right_child==None:
+				cur_node.right_child=node(word)
+				cur_node.right_child.parent=cur_node # set parent
+			else:
+				self._insert(word,cur_node.right_child)
+		else:
+			print("word already in tree!")
+			inTree = True # used to keep the node count from being incremented 
+	
+		return inTree
+	
+	#public methods for prints
+	def in_order_print(self):
+		if self.root!=None:
+			self._in_order_print(self.root)
+	def pre_order_print(self):
+		if self.root!=None:
+			self._pre_order_print(self.root)		
+	def post_order_print(self):
+		if self.root!=None:
+			self._post_order_print(self.root)
+
+	#private recursive print methods called by public methods above
+	def _in_order_print(self,cur_node):
+		if cur_node!=None:
+			self._in_order_print(cur_node.left_child)
+			print ('%d- %s, h=%d, bf=%d'%(cur_node.node_id, str(cur_node.word),cur_node.height, cur_node.balance_factor))
+			self._in_order_print(cur_node.right_child)
+	
+	def _pre_order_print(self,cur_node):
+		if cur_node!=None:
+			print ('%d- %s, h=%d, bf=%d'%(cur_node.node_id, str(cur_node.word),cur_node.height, cur_node.balance_factor))
+			self._pre_order_print(cur_node.left_child)
+			self._pre_order_print(cur_node.right_child)
+
+	def _post_order_print(self,cur_node):
+		if cur_node!=None:
+			self._post_order_print(cur_node.left_child)
+			self._post_order_print(cur_node.right_child)		
+			print ('%d- %s, h=%d, bf=%d'%(cur_node.node_id, str(cur_node.word),cur_node.height, cur_node.balance_factor))
+
+
 
 	def find(self,word):
 		if self.root!=None:
@@ -272,10 +273,9 @@ class binary_search_tree:
 	def graphviz_get_ids(self, node, viz_out):
 		if node:
 			self.graphviz_get_ids(node.left_child, viz_out)
-			viz_out.write(" node{} [label=\"{} ({})\"];\n".format(node.node_id, node.word, node.node_id))
+			viz_out.write(" node{} [label=\"{}-{}, H={}, BF={}\"];\n".format(node.node_id, node.node_id, node.word, node.height, node.balance_factor))
 			self.graphviz_get_ids(node.right_child, viz_out)
-			#viz_out.write(" node{} [label=\"{} ({})\"];\n".format(node.node_id, node.word, node.node_id))
-			
+	
 	def graphviz_make_connections(self, node, viz_out):
 		if node:
 			if node.left_child:
@@ -295,7 +295,7 @@ class binary_search_tree:
 #Main Program	
 
 wordBST=binary_search_tree()
-with open('words_50.txt','r') as file:
+with open('words_25.txt','r') as file:
 	for word in file:
 		wordBST.insert(word.strip().upper())
 
