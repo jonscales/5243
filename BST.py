@@ -63,35 +63,6 @@ class binary_search_tree:
 			self._post_order_print(cur_node.left_child)
 			self._post_order_print(cur_node.right_child)		
 			print (str(cur_node.value))
-	def inorder_print(self):
-		if self.root!=None:
-			self._inorder_print(self.root)
-
-	def preorder_print(self):
-		if self.root!=None:
-			self._preorder_print(self.root)
-
-	def postorder_print(self):
-		if self.root!=None:
-			self._postorder_print(self.root)				
-
-	def _inorder_print(self,cur_node):
-		if cur_node!=None:
-			self._inorder_print(cur_node.left_child)
-			print (str(cur_node.value))
-			self._inorder_print(cur_node.right_child)
-
-	def _preorder_print(self,cur_node):
-		if cur_node!=None:
-			print (str(cur_node.value))
-			self._preorder_print(cur_node.left_child)
-			self._preorder_print(cur_node.right_child)
-
-	def _postorder_print(self,cur_node):
-		if cur_node!=None:
-			self._postorder_print(cur_node.left_child)
-			self._postorder_print(cur_node.right_child)	
-			print (str(cur_node.value))			
 
 	def height(self):
 		if self.root!=None:

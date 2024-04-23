@@ -175,9 +175,8 @@ class AVLTree:
 	def height(self):
 		""" called to see if a tree exits, if so recursively calls _height()"""
 		if self.root!=None:
-			return self._height(self.root,0)
-		else:
-			return 0
+			return self._height(self.root,-1)
+		
 
 	def _height(self,cur_node,cur_height):
 		"""recursive height function continually passes in child nodes until reaching leaf
@@ -191,15 +190,16 @@ class AVLTree:
 		"""Updates the node's height attribute after any insertion, deletion, 
 			or rebalancing """
 		if cur_node== None:
-			return 0
+			return 
 		left_height = cur_node.left_child.height if cur_node.left_child else 0
 		right_height =cur_node.right_child.height if cur_node.right_child else 0 
-		cur_node.height = 1 + max(left_height, right_height)
-		return cur_node.height
+		cur_node.height = max(left_height, right_height) 
+		return cur_node.height 
 
 	def update_balfactor(self,cur_node):
 		"""Updates the balance factor attribute of a node after any insertion,
 			deletion, or rebalancing event"""
+		
 		if cur_node == None:
 			return 0
 		left_height = cur_node.left_child.height if cur_node.left_child else 0
@@ -208,7 +208,7 @@ class AVLTree:
 		return cur_node.balance_factor
 
 	def update_H_BF(self, cur_node):
-		""" will subsequently call both the update_height and update_balance factor methods"""
+		""" will sequentially call both the update_height and update_balance factor methods"""
 		self.update_height(cur_node)
 		self.update_balfactor(cur_node)
 

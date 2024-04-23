@@ -67,6 +67,20 @@ class binary_search_tree:
 			self._height_sum(cur_node.left_child)
 			self._height_sum(cur_node.right_child)
 	
+	def update_heights(self):
+		if self.root != None:
+			self._update_heights(self.root)
+		else:
+			self.root.height=0
+
+	def _update_heights(self,cur_node):
+		if cur_node == None:
+			return 0
+		left_height= self._update_heights(cur_node.left_child)
+		right_height=self._update_heights(cur_node.right_child)
+		cur_node.height = max(left_height, right_height)
+		return cur_node.height
+
 	def update_balfactor(self,cur_node):
 		"""Updates the balance factor attribute of a node after any insertion,
 			deletion, or rebalancing event"""
@@ -84,30 +98,26 @@ class binary_search_tree:
 		if self.root == None:
 			self.root=node(word)
 			self.num_nodes += 1
-			self.height()
-			self.update_balfactor(self.root)
-			
+			self.update_heights()
+						
 		else:
 			self._insert(word,self.root)
 			if inTree == False:
 				self.num_nodes += 1
+				self.update_heights()
 				
-				self.update_balfactor(self.root)
-
 	def _insert(self,word,cur_node):
 		inTree=False
 		if word<cur_node.word:
 			if cur_node.left_child==None:
 				cur_node.left_child=node(word)
 				cur_node.left_child.parent=cur_node # set parent
-				self.height()
 			else:
 				self._insert(word,cur_node.left_child)
 		elif word>cur_node.word:
 			if cur_node.right_child==None:
 				cur_node.right_child=node(word)
 				cur_node.right_child.parent=cur_node # set parent
-				self.height()
 			else:
 				self._insert(word,cur_node.right_child)
 		else:
