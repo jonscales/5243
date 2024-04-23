@@ -67,16 +67,22 @@ class binary_search_tree:
 			self._height_sum(cur_node.left_child)
 			self._height_sum(cur_node.right_child)
 	
-	def update_height(self, cur_node):
+	def _calculate_height(self, cur_node):
+		if cur_node == None:
+			return 0
+		return 1 + max(self._calculate_height(cur_node.left_child),self._calculate_height(cur_node.right_child))
+	
+	def update_heights(self, cur_node=None):
 		"""Updates the node's height attribute after any insertion, deletion, 
 			or rebalancing """
-		if cur_node != None:
-			
-			left_height = self.update_height(cur_node.left_child) if cur_node.left_child else 0
-			right_height = self.update_height(cur_node.right_child) if cur_node.right_child else 0 
-			cur_node.height = 1 + max(left_height, right_height)
+		if cur_node == None:	
+			cur_node=self.root
+		if cur_node == None:
+			return
+		cur_node.height = self._calculate_height(cur_node)
+		self.update_heights(cur_node.left_child)
+		self.update_heights(cur_node.right_child)
 		
-
 	def update_balfactor(self,cur_node):
 		"""Updates the balance factor attribute of a node after any insertion,
 			deletion, or rebalancing event"""
@@ -94,14 +100,14 @@ class binary_search_tree:
 		if self.root == None:
 			self.root=node(word)
 			self.num_nodes += 1
-			self.update_height(self.root)
+			self.update_heights()
 			self.update_balfactor(self.root)
 			
 		else:
 			self._insert(word,self.root)
 			if inTree == False:
 				self.num_nodes += 1
-				self.update_height(self.root)
+				self.update_heights()
 				self.update_balfactor(self.root)
 
 	def _insert(self,word,cur_node):
@@ -110,16 +116,12 @@ class binary_search_tree:
 			if cur_node.left_child==None:
 				cur_node.left_child=node(word)
 				cur_node.left_child.parent=cur_node # set parent
-				self.update_height(self.root)
-				self.update_balfactor(self.root)
 			else:
 				self._insert(word,cur_node.left_child)
 		elif word>cur_node.word:
 			if cur_node.right_child==None:
 				cur_node.right_child=node(word)
 				cur_node.right_child.parent=cur_node # set parent
-				self.update_height(self.root)
-				self.update_balfactor(self.root)
 			else:
 				self._insert(word,cur_node.right_child)
 		else:
