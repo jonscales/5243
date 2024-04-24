@@ -1,52 +1,21 @@
-
 """
-Jon Scales
-Program 3
-CMPS 5243 
-Spring 2024
-AVL Tree Program to store random words
-
-"""
-
-"""
-CREDITS
-
-Maljority of AVL Tree Code created by Brian Faure and take from his github
-bfaure/Python3_Data_Structures GitHub
+AVL Tree Code
+Code copied from bfaure/Python3_Data_Structures GitHub
 https://github.com/bfaure/Python3_Data_Structures/blob/master/AVL_Tree/main.py
-
-I added methods for calculating the average node height, complexity value, balance factor
-node counter.  Some code was added to give nodes an ID # for output in graphviz and has 
-no bearing on the other methods which count nodes and calculate average heights. 
-
-I changed some variable names and function names since this program used a list of words 
-as the data values in the nodes. 
 """
-import os
-import math
-
-""" syntax to generate path name for output of graphviz .dot file"""
-script_dir=os.path.dirname(os.path.abspath(__file__))
-outpath=os.path.join(script_dir, 'myavl.dot')
-
 class node:
-	node_counter = 0
 	def __init__(self,word=None):
 		self.word=word
 		self.left_child=None
 		self.right_child=None
-		self.parent=None 
-		self.height = 1    # height of node in tree (max dist. to leaf) 
-		self.balance_factor = 0   # store a balance factor calculated from the height calculations
-		self.node_id=node.node_counter # used for giving each node a numerical ID for output
-		node.node_counter +=1 # counter to generate the ID based on the order each word is inserted
+		self.parent=None # pointer to parent node in tree
+		self.height=1 # height of node in tree (max dist. to leaf) NEW FOR AVL
+		self.balance_factor=0 # store a balance factor calculated from the height calculations
 
 class AVLTree:
 	def __init__(self):
 		"""constructor method"""
 		self.root=None
-		self.num_nodes = 0
-		self.sum_of_heights = 0
 
 	def __repr__(self):
 		"""function to display the tree sort of """
@@ -99,22 +68,15 @@ class AVLTree:
 		return content
 
 	def insert(self,word):
-		"""Called to insert a word into the tree. Also increments the num_nodes attribute"""
-		inTree=False
+		"""Called to insert a word into the tree"""
 		if self.root==None:
 			self.root=node(word)
-			self.update_balfactor(self.root)
-			self.num_nodes+=1
 		else:
 			self._insert(word,self.root)
-			if inTree == False:
-				self.num_nodes += 1
-				self.update_balfactor(self.root)
-			
+
 	def _insert(self,word,cur_node):
 		"""Called recursively by the base insert function to put word into correct location
 			will not insert duplicate words"""
-		#insert to left
 		if word<cur_node.word:
 			if cur_node.left_child==None:
 				cur_node.left_child=node(word)
@@ -122,7 +84,6 @@ class AVLTree:
 				self._inspect_insertion(cur_node.left_child)
 			else:
 				self._insert(word,cur_node.left_child)
-		#insert to right	
 		elif word>cur_node.word:
 			if cur_node.right_child==None:
 				cur_node.right_child=node(word)
@@ -130,86 +91,36 @@ class AVLTree:
 				self._inspect_insertion(cur_node.right_child)
 			else:
 				self._insert(word,cur_node.right_child)
-		#do no insert duplicates
 		else:
 			print("word already in tree!")
-			inTree = True # used to keep the node count from being incremented 
-			return inTree
 
 	def print_tree(self):
-		"""This root method will call recursive method to do an in-order print of nodes"""
 		if self.root!=None:
 			self._print_tree(self.root)
 
-	def _print_tree(self,cur_node):#this does an inorder print
+	def _print_tree(self,cur_node):
 		if cur_node!=None:
 			self._print_tree(cur_node.left_child)
-			# gives node ID, node value, node height and node's balance factor
-			print ('%d- %s, h=%d, bf=%d'%(cur_node.node_id, str(cur_node.word),cur_node.height, cur_node.balance_factor)) 
+			print ('%s, h=%d'%(str(cur_node.word),cur_node.height))
 			self._print_tree(cur_node.right_child)
-	
-	def complexity(self):
-		"""Returns the complexity of O(logn) for the size of the tree (n)"""
-		return "{:.2f}".format(math.log(self.num_nodes, 2))
-	
-	def avg_height(self):
-		"""Returns the average height of the nodes"""
-		return self.sum_of_heights/self.num_nodes
-		
-	def height_sum(self):
-		""" will calculate a sum of the heights of all nodes in a tree. Is passed the tree itself
-			then recursively calls each child until reaching leaf nodes. The sum of heights is stored
-			as an attribute of the tree. The function also returns the value"""
-		if self.root==None:
-			self.sum_of_heights = 0
-		else:
-			self._height_sum(self.root)
-		return self.sum_of_heights
-			
-	def _height_sum(self, cur_node):
-		""" recursive height summation method called from the height_sum(root) method"""
-		if cur_node != None:
-			self.sum_of_heights += cur_node.height
-			self._height_sum(cur_node.left_child)
-			self._height_sum(cur_node.right_child)
-				
+
 	def height(self):
 		""" called to see if a tree exits, if so recursively calls _height()"""
 		if self.root!=None:
 			return self._height(self.root,0)
-		
+		else:
+			return 0
 
 	def _height(self,cur_node,cur_height):
-		"""recursive height function starts with the root & passes in child nodes until reaching leaf
-		   and adds height to node's height parameter. returns greatest of left or right path"""
+		"""recursive height function continually passes in child nodes until reaching leaf
+		   and adds height to node's height parameter. returns greates of left or right path"""
 		if cur_node==None: return cur_height
 		left_height=self._height(cur_node.left_child,cur_height+1)
 		right_height=self._height(cur_node.right_child,cur_height+1)
 		return max(left_height,right_height)
-	
-	def update_height(self, cur_node):
-		"""Updates the node's height attribute after any insertion, deletion, 
-			or rebalancing """
-		if cur_node== None:
-			return 
-		left_height = cur_node.left_child.height if cur_node.left_child else 0
-		right_height =cur_node.right_child.height if cur_node.right_child else 0 
-		cur_node.height = max(left_height, right_height) 
-		return cur_node.height 
-
-	def update_balfactor(self,cur_node):
-		"""Updates the balance factor attribute of a node after any insertion,
-			deletion, or rebalancing event"""
-		
-		if cur_node == None:
-			return 0
-		left_height = cur_node.left_child.height if cur_node.left_child else 0
-		right_height =cur_node.right_child.height if cur_node.right_child else 0 
-		cur_node.balance_factor = left_height - right_height
-		return cur_node.balance_factor
 
 	def find(self,word):
-		"""Called with tree root to find a word in the tree"""
+		"""Called to find a word in the tree"""
 		if self.root!=None:
 			return self._find(word,self.root)
 		else:
@@ -399,12 +310,6 @@ class AVLTree:
 			self.get_height(z.right_child))
 		y.height=1+max(self.get_height(y.left_child),
 			self.get_height(y.right_child))
-		
-		# self.update_height(z)
-		# self.update_height(y)
-		#update balance factors after rotations
-		self.update_balfactor(z)
-		self.update_balfactor(y)
 
 	def _left_rotate(self,z):
 		sub_root=z.parent 
@@ -426,12 +331,6 @@ class AVLTree:
 			self.get_height(z.right_child))
 		y.height=1+max(self.get_height(y.left_child),
 			self.get_height(y.right_child))
-		
-		# self.update_height(z)
-		# self.update_height(y)
-		#update balance factors after rotations
-		self.update_balfactor(z)
-		self.update_balfactor(y)
 
 	def get_height(self,cur_node):
 		if cur_node==None: return 0
@@ -442,7 +341,7 @@ class AVLTree:
 		right=self.get_height(cur_node.right_child)
 		return cur_node.left_child if left>=right else cur_node.right_child
 	
-	#Methods to generate .dot file for use by GraphViz to visualize tree structure.
+#Methods to generate .dot file for use by GraphViz to visualize tree structure.
 	#Credit to Terry Griffin via Tina Johnson
 	def graphviz_get_ids(self, node, viz_out):
 		"""This method does an in-order read of the tree and create the node in the graphviz format"""
@@ -469,28 +368,13 @@ class AVLTree:
 			self.graphviz_make_connections(self.root, viz_out)
 			viz_out.write("} \n")
 	
-
-#main body of program
-
-# instatiate an instance of the AVLTree class
 avl=AVLTree()
-
 #read in random words from text file and insert into tree
 with open('words_25.txt','r') as file:
     for word in file:
         avl.insert(word.strip().lower())
 
-#generate graphviz output
-avl.graphviz_out(outpath)
 
-#print tree to console
 avl.print_tree()
 
-# Perform analysis of the tree
-print('The number of nodes in this AVL tree is : ', avl.num_nodes)
-print('Tree height is : ', avl.height())
-print('O(log n) complexity value for this tree is : ', avl.complexity())
-print('The total sum of all node heights is : ', avl.height_sum())
-print('The average node height is : ', avl.avg_height())
-#print(avl)
 

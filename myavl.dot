@@ -14,7 +14,7 @@ digraph g {
  node4 [label="4-myelosyphilis, H=3, BF=0"];
  node23 [label="23-nirles, H=1, BF=0"];
  node12 [label="12-nope, H=2, BF=0"];
- node2 [label="2-pharyngopathy, H=6, BF=0"];
+ node2 [label="2-pharyngopathy, H=6, BF=1"];
  node7 [label="7-phrygium, H=1, BF=0"];
  node3 [label="3-postmineral, H=2, BF=0"];
  node8 [label="8-punnigram, H=1, BF=0"];
