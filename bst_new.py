@@ -189,7 +189,7 @@ class BSTree:
 # Example usage:
 bst = BSTree()
 #read in random words from text file and insert into tree
-with open('words_25.txt','r') as file:
+with open('words.txt','r') as file:
     for word in file:
         bst.insert(word.strip().lower())
 
@@ -197,7 +197,7 @@ with open('words_25.txt','r') as file:
 bst.graphviz_out(outpath)
 
 bst.inorder_traversal(bst.root)
-print('The number of nodes in this AVL tree is : ', bst.num_nodes)
+print('The number of nodes in this BST is : ', bst.num_nodes)
 print('Tree height is : ', bst.tree_height())
 print('O(log n) complexity value for this tree is : ', bst.complexity())
 print('The total sum of all node heights is : ', bst.height_sum())
