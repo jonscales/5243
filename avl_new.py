@@ -189,7 +189,7 @@ class AVLTree:
 # Example usage:
 avl = AVLTree()
 #read in random words from text file and insert into tree
-with open('words.txt','r') as file:
+with open('words_20.txt','r') as file:
     for word in file:
         avl.insert(word.strip().lower())
 
