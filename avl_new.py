@@ -1,5 +1,32 @@
+"""
+Jon Scales
+Program 3
+CMPS 5243 
+Spring 2024
+AVL Tree Program to store random words
 
-#code originating from chatGPT3
+"""
+
+"""
+CREDITS
+
+The basis of this python AVL Tree Code was derived from code written by Brian Faure and taken from his github
+bfaure/Python3_Data_Structures GitHub
+https://github.com/bfaure/Python3_Data_Structures/blob/master/AVL_Tree/main.py 
+
+Additional modifications were derived based on ChatGPT queries regarding python syntax
+
+I removed methods for performing deletions to shorten the code. 
+
+I added methods for calculating the average node height, complexity value, balance factor
+node counter.  Some code was added to give nodes an ID # for output in graphviz and has 
+no bearing on the other methods which count nodes and calculate average heights. 
+
+Methods to produce a .dot file were added to aid in visualization of the tree structure. These methods
+were provided by Tina Johnson and originated with Terry Griffin.  I modified them (with assistance of
+ChatGPT) from C++ to python for use in this program
+ 
+"""
 
 import os
 import math
