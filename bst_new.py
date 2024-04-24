@@ -38,7 +38,7 @@ script_dir=os.path.dirname(os.path.abspath(__file__))
 outpath=os.path.join(script_dir, 'newbst.dot')
 
 class Node:
-    node_counter = 0
+    node_counter = 0  # class variable to generate node ID
     def __init__(self, key):
         self.key = key
         self.left = None
@@ -50,6 +50,7 @@ class Node:
 
 class BSTree:
     def __init__(self):
+        """constructor method"""
         self.root = None
         self.num_nodes = 0
         self.sum_of_heights = 0
@@ -61,64 +62,34 @@ class BSTree:
             return node.height
 
     def update_height(self, node):
+        """updates the height attribute of a node. called from rebalance method"""
         if node is not None:
             node.height = 1 + max(self.height(node.left), self.height(node.right))
 
     def update_balance_factor(self, node):
+        """updates the balance factor attribute of a node. called from rebalance method"""
         if node is not None:
             node.balance_factor = self.height(node.left) - self.height(node.right)
 
-    def rotate_left(self, x):
-        y = x.right
-        x.right = y.left
-        y.left = x
-        self.update_height(x)
-        self.update_height(y)
-        self.update_balance_factor(x)
-        self.update_balance_factor(y)
-        return y
-
-    def rotate_right(self, y):
-        x = y.left
-        y.left = x.right
-        x.right = y
-        self.update_height(y)
-        self.update_height(x)
-        self.update_balance_factor(y)
-        self.update_balance_factor(x)
-        return x
-
     def update_node_data(self, node):
+        """Updates node attributes by calling update height & balance factor methods."""
         self.update_height(node)
         self.update_balance_factor(node)
-        # if node.balance_factor == 2:
-        #     if self.height(node.left.left) >= self.height(node.left.right):
-        #         node = self.rotate_right(node)
-        #     else:
-        #         node.left = self.rotate_left(node.left)
-        #         node = self.rotate_right(node)
-        # elif node.balance_factor == -2:
-        #     if self.height(node.right.right) >= self.height(node.right.left):
-        #         node = self.rotate_left(node)
-        #     else:
-        #         node.right = self.rotate_right(node.right)
-        #         node = self.rotate_left(node)
         return node
 
     def insert(self, key):
+        """Called to insert a word into the tree. Also increments the num_nodes attribute"""
         self.num_nodes += 1
         self.root = self._insert(self.root, key)
 
     def _insert(self, node, key):
+        """Called  by the public insert function to run recursively to put word into correct location"""
         if node is None:
             return Node(key)
-            
         elif key < node.key:
             node.left = self._insert(node.left, key)
-            
         else:
             node.right = self._insert(node.right, key)
-            
         return self.update_node_data(node)
 
     def complexity(self):
@@ -151,7 +122,6 @@ class BSTree:
         if self.root!=None:
             return self._tree_height(self.root,0)
         
-
     def _tree_height(self,cur_node,cur_height):
         """recursive height function starts with the root & passes in child nodes until reaching leaf
             and adds height to node's height parameter. returns greatest of left or right path"""
@@ -161,9 +131,11 @@ class BSTree:
         return max(left_height,right_height)
 
     def calculate_heights(self):
+        """public method to calculate node heights"""
         self._calculate_heights(self.root)
 
     def _calculate_heights(self, node, height=0):
+        """private, recursive method to calculate all node heights"""
         if node is None:
             return
         node.height = height
@@ -171,20 +143,23 @@ class BSTree:
         self._calculate_heights(node.right, height + 1)
 
     def calculate_balance_factors(self):
+        """public method to calculate node balance factor"""
         self._calculate_balance_factors(self.root)
 
     def _calculate_balance_factors(self, node):
+        """private, recursive method to calculate all node balance factors"""
         if node is None:
             return
         self.update_balance_factor(node)
         self._calculate_balance_factors(node.left)
         self._calculate_balance_factors(node.right)
 
-    def inorder_traversal(self, node):
+    def inorder_print(self, node):
+        """traverses tree in order and prints out node ID, key, height and balance factor"""
         if node:
-            self.inorder_traversal(node.left)
+            self.inorder_print(node.left)
             print(node.node_id, node.key, " H:", node.height, " BF:", node.balance_factor)
-            self.inorder_traversal(node.right)
+            self.inorder_print(node.right)
 	
     #Methods to generate .dot file for use by GraphViz to visualize tree structure.
     #Credit to Terry Griffin via Tina Johnson
@@ -213,8 +188,6 @@ class BSTree:
             self.graphviz_make_connections(self.root, viz_out)
             viz_out.write("} \n")
 
-	
-
 # Example usage:
 bst = BSTree()
 #read in random words from text file and insert into tree
@@ -225,7 +198,7 @@ with open('words_20.txt','r') as file:
 #generate graphviz output
 bst.graphviz_out(outpath)
 
-bst.inorder_traversal(bst.root)
+bst.inorder_print(bst.root)
 print('The number of nodes in this BST is : ', bst.num_nodes)
 print('Tree height is : ', bst.tree_height())
 print('O(log n) complexity value for this tree is : ', bst.complexity())

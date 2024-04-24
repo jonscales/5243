@@ -36,7 +36,7 @@ script_dir=os.path.dirname(os.path.abspath(__file__))
 outpath=os.path.join(script_dir, 'newavl.dot')
 
 class Node:
-    node_counter = 0
+    node_counter = 0 # class variable to generate node ID
     def __init__(self, key):
         self.key = key
         self.left = None
@@ -48,6 +48,7 @@ class Node:
 
 class AVLTree:
     def __init__(self):
+        """constructor method"""
         self.root = None
         self.num_nodes = 0
         self.sum_of_heights = 0
@@ -59,14 +60,18 @@ class AVLTree:
             return node.height
 
     def update_height(self, node):
+        """updates the height attribute of a node. called from rebalance method"""
         if node is not None:
             node.height = 1 + max(self.height(node.left), self.height(node.right))
 
     def update_balance_factor(self, node):
+        """updates the balance factor attribute of a node. called from rebalance method"""
         if node is not None:
             node.balance_factor = self.height(node.left) - self.height(node.right)
 
     def rotate_left(self, x):
+        """performs a left rotation on the node passed into the function, then calls update height
+           and balance factor methods"""
         y = x.right
         x.right = y.left
         y.left = x
@@ -77,6 +82,8 @@ class AVLTree:
         return y
 
     def rotate_right(self, y):
+        """performs a right rotation on the node passed into the function, then calls update height
+           and balance factor methods"""
         x = y.left
         y.left = x.right
         x.right = y
@@ -87,6 +94,8 @@ class AVLTree:
         return x
 
     def rebalance(self, node):
+        """calls update height & balance factor methods, then based on the balance factor of the 
+           node, will call the appropriate rotation method to correct the bal factor to <2 or >-2"""
         self.update_height(node)
         self.update_balance_factor(node)
         if node.balance_factor == 2:
@@ -104,19 +113,18 @@ class AVLTree:
         return node
 
     def insert(self, key):
+        """Called to insert a word into the tree. Also increments the num_nodes attribute"""
         self.num_nodes += 1
         self.root = self._insert(self.root, key)
 
     def _insert(self, node, key):
+        """Called  by the public insert function to run recursively to put word into correct location"""
         if node is None:
             return Node(key)
-            
         elif key < node.key:
             node.left = self._insert(node.left, key)
-            
         else:
             node.right = self._insert(node.right, key)
-            
         return self.rebalance(node)
 
     def complexity(self):
@@ -145,10 +153,9 @@ class AVLTree:
             self._height_sum(cur_node.right)
                 
     def tree_height(self):
-        """ called to see if a tree exits, if so recursively calls _height()"""
+        """ called to see if a tree exits, if so recursively calls _tree_height()"""
         if self.root!=None:
             return self._tree_height(self.root,0)
-        
 
     def _tree_height(self,cur_node,cur_height):
         """recursive height function starts with the root & passes in child nodes until reaching leaf
@@ -159,30 +166,35 @@ class AVLTree:
         return max(left_height,right_height)
 
     def calculate_heights(self):
+        """public method to calculate node heights"""
         self._calculate_heights(self.root)
 
     def _calculate_heights(self, node, height=0):
-        if node is None:
+        """private, recursive method to calculate all node heights"""
+        if node is None: #base case stops at leaf node
             return
         node.height = height
         self._calculate_heights(node.left, height + 1)
         self._calculate_heights(node.right, height + 1)
 
     def calculate_balance_factors(self):
+        """public method to calculate node balance factor"""
         self._calculate_balance_factors(self.root)
 
     def _calculate_balance_factors(self, node):
-        if node is None:
+        """private, recursive method to calculate all node balance factors"""
+        if node is None: # base case stops at leaf node
             return
         self.update_balance_factor(node)
         self._calculate_balance_factors(node.left)
         self._calculate_balance_factors(node.right)
 
-    def inorder_traversal(self, node):
+    def inorder_print(self, node):
+        """traverses tree in order and prints out node ID, key, height and balance factor"""
         if node:
-            self.inorder_traversal(node.left)
+            self.inorder_print(node.left)
             print(node.node_id, node.key, " H:", node.height, " BF:", node.balance_factor)
-            self.inorder_traversal(node.right)
+            self.inorder_print(node.right)
 	
     #Methods to generate .dot file for use by GraphViz to visualize tree structure.
     #Credit to Terry Griffin via Tina Johnson
@@ -211,10 +223,9 @@ class AVLTree:
             self.graphviz_make_connections(self.root, viz_out)
             viz_out.write("} \n")
 
-	
-
 # Example usage:
 avl = AVLTree()
+
 #read in random words from text file and insert into tree
 with open('words_20.txt','r') as file:
     for word in file:
@@ -223,7 +234,8 @@ with open('words_20.txt','r') as file:
 #generate graphviz output
 avl.graphviz_out(outpath)
 
-avl.inorder_traversal(avl.root)
+#generate output and analysis
+avl.inorder_print(avl.root)
 print('The number of nodes in this AVL tree is : ', avl.num_nodes)
 print('Tree height is : ', avl.tree_height())
 print('O(log n) complexity value for this tree is : ', avl.complexity())
